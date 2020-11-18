@@ -1,15 +1,15 @@
 #include <iostream>
-#include <cmath>
 #include <cstring>
-#include <conio.h>
+#include <string>
 #include <string.h>
+#include <conio.h>
 #include <iomanip>
 #include <windows.h>
-#include <string>
+#include <cstdlib>
 
 using namespace std;
 
-int homeDisplay() {
+int homeDisplay() { // homepage
 
 	int s;
 	cout << endl << "                                  WELCOME TO GADGET STORE !               " << endl;
@@ -22,70 +22,61 @@ int homeDisplay() {
 	system("cls");
 
 	return s;
-}
+} 
 
-void buyersMenu() {
+void buyersMenu() { //list barangan dijual (will put stocks later)
 
-	cout << " ******************************************* CATEGORIES OF GADGET (PAGE 1) ******************************************* " << endl;
+	cout << " ******************************************* CATEGORIES OF GADGET ******************************************* " << endl;
 	cout << "                                           -PENDRIVE-                                                      " << endl << endl;
 	cout << "          " << "|             Capacities : 32GB             |" << "     " << "|             Capacities : 64GB             |" << endl;
 	cout << "          " << "|            Speed : 100MB/s read           |" << "     " << "|            Speed : 100MB/s read           |" << endl;
 	cout << "          " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << "     " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << endl;
 	cout << "          " << "|             Price : RM15.50               |" << "     " << "|             Price : RM28.00               |" << endl;
+	cout << "          " << "|               CODE : PEN01                |" << "     " << "|               CODE : PEN02                |" << endl;
 
-
-	cout << "Mouse" << endl;
-	cout << "Headphones" << endl << endl;
-	
-	system("pause");
+	cout << "Mouse" << endl; //later tambah
+	cout << "Headphones" << endl << endl; //later tambah
 }
 
 /*string chooseItem() {
-
 	string kod;
 
 	cout << "ENTER CODE FOR THE PRODUCT YOU WANTED TO BUY";
 	cout << endl << " -----> :  ";
 	getline(cin, kod);
 	cin.ignore();
-	system("pause");
+
 	return kod;
+
+	system("pause");
 }*/
 
 int main() {
 
-	int status;
-	char homepage;
-	string code;
+	int status, hehe;
+	char homepage, code[10];
 
 	do {
 
-		do {
-			status = homeDisplay();
-			if ((status != 1) && (status != 2)) {
-				Beep(1000, 500);
-				cout << "=========> ERROR <==========  " << endl;
-				cout << "PLEASE PRESS 1 FOR USER OR PRESS 2 FOR ADMIN" << endl;
-				system("pause");
-				system("cls");
-			}// Error if user input selain 1 or 2
+		status=homeDisplay();
 
-
-			if (status == 1) {     // status 1 for buyer
-				buyersMenu(); // Menu (User boleh pilih category gadget apa)
-				//code=chooseItem(); User can choose which item to buy based on item codes
-				system("cls");
-				cout << code << endl;
-				system("pause");
-				system("cls");
-			}
-			else if (status == 2) {   // status 2 for admin
-				cout << "HI ADMIN" << endl;
-				//Display admin page function
-				system("pause");
-				system("cls");
-			}
-		} while ((status != 1) && (status != 2)); //do ni akan berterusan kalau user input salah
+		if (status == 1) { //BUYERS PAGE
+			buyersMenu();
+			cin.ignore();
+			cout << "ENTER PRODUCT CODE FOR ITEMS YOU WANT TO BUY : ";
+			cin.getline(code, 10);
+			cout << code << endl;
+		}
+		else if (status == 2) { // ADMIN PAGE
+			cout << "WELCOME TO ADMIN PAGE" << endl; //will put function for admin(check stocks/check total profit)
+		}
+		else { // ERROR
+			Beep(1000, 500);
+			cout << "=========> ERROR <==========  " << endl;
+			cout << "PLEASE PRESS 1 FOR USER OR PRESS 2 FOR ADMIN" << endl;
+			system("pause");
+			system("cls"); 
+		}
 
 		cout << " Back to homepage ?(Y|N) " << endl;
 		cout << endl << " -----> :  ";
