@@ -44,10 +44,8 @@ void buyersMenu() { //list barangan dijual (will put stocks later)
 	cout << "ENTER CODE FOR THE PRODUCT YOU WANTED TO BUY";
 	cout << endl << " -----> :  ";
 	getline(cin, kod);
-	cin.ignore();
-
+	
 	return kod;
-
 	system("pause");
 }*/
 
@@ -62,8 +60,8 @@ int main() {
 
 		if (status == 1) { //BUYERS PAGE
 			buyersMenu();
-			cin.ignore();
 			cout << "ENTER PRODUCT CODE FOR ITEMS YOU WANT TO BUY : ";
+			cin.ignore();
 			cin.getline(code, 10);
 			cout << code << endl;
 		}
