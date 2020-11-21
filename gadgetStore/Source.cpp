@@ -4,6 +4,8 @@
 #include <iomanip>
 #include <windows.h>
 #include <stdlib.h>
+#include <limits>
+#undef max
 
 using namespace std;
 
@@ -49,7 +51,7 @@ void buyersMenu() { //list barangan dijual (will put stocks later)
 
 int main() {
 
-	int status, hehe;
+	int status;
 	char homepage, code[10];
 
 	do {
@@ -69,7 +71,7 @@ int main() {
 		else { // ERROR
 			if (cin.fail()) { //when input char on int variable
 				cin.clear();
-				cin.ignore();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			}
 			Beep(1000, 500);
 			cout << "=========> ERROR <==========  " << endl;
@@ -81,7 +83,6 @@ int main() {
 		cout << "\nBack to homepage ?(Y|N) " << endl;
 		cout << endl << " -----> :  ";
 		cin >> homepage;
-		system("cls");
 	} while ((homepage == 'Y') || (homepage == 'y'));     //after all the buyers dah beli barang, boleh tekan Y, gi hompage and tukar kepada admin
 
 	return 0;
