@@ -1,11 +1,9 @@
 #include <iostream>
-#include <cstring>
 #include <string>
-#include <string.h>
 #include <conio.h>
 #include <iomanip>
 #include <windows.h>
-#include <cstdlib>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -69,18 +67,22 @@ int main() {
 			cout << "WELCOME TO ADMIN PAGE" << endl; //will put function for admin(check stocks/check total profit)
 		}
 		else { // ERROR
+			if (cin.fail()) { //when input char on int variable
+				cin.clear();
+				cin.ignore();
+			}
 			Beep(1000, 500);
 			cout << "=========> ERROR <==========  " << endl;
 			cout << "PLEASE PRESS 1 FOR USER OR PRESS 2 FOR ADMIN" << endl;
 			system("pause");
-			system("cls"); 
+			system("cls");
 		}
 
-		cout << " Back to homepage ?(Y|N) " << endl;
+		cout << "\nBack to homepage ?(Y|N) " << endl;
 		cout << endl << " -----> :  ";
 		cin >> homepage;
 		system("cls");
-	} while ((homepage == 'Y' || homepage == 'y'));     //after all the buyers dah beli barang, boleh tekan Y, gi hompage and tukar kepada admin
+	} while ((homepage == 'Y') || (homepage == 'y'));     //after all the buyers dah beli barang, boleh tekan Y, gi hompage and tukar kepada admin
 
 	return 0;
 }
