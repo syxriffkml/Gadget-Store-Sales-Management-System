@@ -83,6 +83,7 @@ int main() {
 		cout << "\nBack to homepage ?(Y|N) " << endl;
 		cout << endl << " -----> :  ";
 		cin >> homepage;
+		system("cls");
 	} while ((homepage == 'Y') || (homepage == 'y'));     //after all the buyers dah beli barang, boleh tekan Y, gi hompage and tukar kepada admin
 
 	return 0;
