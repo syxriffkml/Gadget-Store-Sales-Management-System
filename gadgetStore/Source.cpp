@@ -64,6 +64,12 @@ int main() {
 			cin.ignore();
 			cin.getline(code, 10);
 			cout << code << endl;
+			if (strcmp(code,"PEN01")==0) {
+				cout << " You bought 32gb pendrive " << endl;
+			}
+			else if (strcmp(code, "PEN02") == 0) {
+				cout << " You bought 64gb pendrive, pendrive mahal woo " << endl;
+			}
 		}
 		else if (status == 2) { // ADMIN PAGE
 			cout << "WELCOME TO ADMIN PAGE" << endl; //will put function for admin(check stocks/check total profit)
