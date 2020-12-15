@@ -3,56 +3,32 @@
 #include <conio.h>
 #include <iomanip>
 #include <windows.h>
-#include <stdlib.h>
 #include <limits>
 #undef max
 
+
 using namespace std;
 
-int homeDisplay() { // homepage
+//struct
+struct people {
+	string name;
+	int age = 0;
+	string phonenum;
+	string bankName;
+	int bankNo = 0;
+};
 
-	int s;
-	cout << endl << "                                  WELCOME TO GADGET STORE !               " << endl;
-	cout << endl << "          " << " -------------------------------- " << "------------------------------- ";
-	cout << endl << "          " << " |       PRESS 1 FOR BUYER      |" << " |      PRESS 2 FOR ADMIN      | ";
-	cout << endl << "          " << " -------------------------------- " << "------------------------------- " << endl;
-	cout << endl << "=========>" << " PLEASE CHOOSE CAREFULLY SINCE THERE IS NO TURNING POINT PASS HERE <==========  ";
-	cout << endl << " -----> :  ";
-	cin >> s;
-	system("cls");
-
-	return s;
-} 
-
-void buyersMenu() { //list barangan dijual (will put stocks later)
-
-	cout << " ******************************************* CATEGORIES OF GADGET ******************************************* " << endl;
-	cout << "                                           -PENDRIVE-                                                      " << endl << endl;
-	cout << "          " << "|             Capacities : 32GB             |" << "     " << "|             Capacities : 64GB             |" << endl;
-	cout << "          " << "|            Speed : 100MB/s read           |" << "     " << "|            Speed : 100MB/s read           |" << endl;
-	cout << "          " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << "     " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << endl;
-	cout << "          " << "|             Price : RM15.50               |" << "     " << "|             Price : RM28.00               |" << endl;
-	cout << "          " << "|               CODE : PEN01                |" << "     " << "|               CODE : PEN02                |" << endl;
-
-	cout << "Mouse" << endl; //later tambah
-	cout << "Headphones" << endl << endl; //later tambah
-}
-
-/*string chooseItem() {
-	string kod;
-
-	cout << "ENTER CODE FOR THE PRODUCT YOU WANTED TO BUY";
-	cout << endl << " -----> :  ";
-	getline(cin, kod);
-	
-	return kod;
-	system("pause");
-}*/
+//function prototype
+int homeDisplay();
+void buyersMenu();
+void daftar(people& customer);
+void receipt(people customer);
 
 int main() {
 
 	int status;
 	char homepage, code[10];
+	people customer;
 
 	do {
 
@@ -70,6 +46,9 @@ int main() {
 			else if (strcmp(code, "PEN02") == 0) {
 				cout << " You bought 64gb pendrive, pendrive mahal woo " << endl;
 			}
+
+			daftar(customer);
+			receipt(customer);
 		}
 		else if (status == 2) { // ADMIN PAGE
 			cout << "WELCOME TO ADMIN PAGE" << endl; //will put function for admin(check stocks/check total profit)
@@ -93,4 +72,72 @@ int main() {
 	} while ((homepage == 'Y') || (homepage == 'y'));     //after all the buyers dah beli barang, boleh tekan Y, gi hompage and tukar kepada admin
 
 	return 0;
+}
+
+
+int homeDisplay() { // homepage
+
+	int s;
+	cout << endl << "                                  WELCOME TO GADGET STORE !               " << endl;
+	cout << endl << "          " << " -------------------------------- " << "------------------------------- ";
+	cout << endl << "          " << " |       PRESS 1 FOR BUYER      |" << " |      PRESS 2 FOR ADMIN      | ";
+	cout << endl << "          " << " -------------------------------- " << "------------------------------- " << endl;
+	cout << endl << "=========>" << " PLEASE CHOOSE CAREFULLY SINCE THERE IS NO TURNING POINT PASS HERE <==========  ";
+	cout << endl << " -----> :  ";
+	cin >> s;
+	system("cls");
+
+	return s;
+}
+
+void buyersMenu() { //list barangan dijual (will put stocks later)
+
+	cout << " ******************************************* CATEGORIES OF GADGET ******************************************* " << endl;
+	cout << "                                           -PENDRIVE-                                                      " << endl << endl;
+	cout << "          " << "|             Capacities : 32GB             |" << "     " << "|             Capacities : 64GB             |" << endl;
+	cout << "          " << "|            Speed : 100MB/s read           |" << "     " << "|            Speed : 100MB/s read           |" << endl;
+	cout << "          " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << "     " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << endl;
+	cout << "          " << "|             Price : RM15.50               |" << "     " << "|             Price : RM28.00               |" << endl;
+	cout << "          " << "|               CODE : PEN01                |" << "     " << "|               CODE : PEN02                |" << endl;
+
+	cout << "Mouse" << endl; //later tambah
+	cout << "Headphones" << endl << endl; //later tambah
+}
+
+void daftar(people &customer) {
+
+	char daftar;
+
+	cout << "Do you want to register as member ? (Y|N) : ";
+	cin >> daftar;
+	if ((daftar == 'Y') || (daftar == 'y')) {
+		cout << "\nPlease enter your name : ";
+		cin.ignore();
+		getline(cin, customer.name);
+		cout << "\nPlease enter your age : ";
+		cin >> customer.age;
+		cout << "\nPlease enter your phone number : ";
+		cin.ignore();
+		getline(cin, customer.phonenum);
+		cout << "\nPlease enter your bank account name : ";
+
+		getline(cin, customer.bankName);
+		cout << "\nPlease enter your bank account number : ";
+		cin >> customer.bankNo;
+	}
+	else {
+		cout << "\nHaha bodo tak register" << endl;
+	}
+}
+
+void receipt(people customer) {
+
+	cout << "\n===== RECEIPT =====" << endl;
+	cout << "customer name : " << customer.name << endl;
+	cout << "customer age : " << customer.age << endl;
+	cout << "customer phone number : " << customer.phonenum << endl;
+	cout << "customer bank name : " << customer.bankName << endl;
+	cout << "customer bank number : " << customer.bankNo << endl;
+
+
 }
