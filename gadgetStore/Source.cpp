@@ -21,6 +21,8 @@ struct people {
 //function prototype
 int homeDisplay();
 void buyersMenu();
+void adminPage();
+void displayAdminPage();
 void daftar(people& customer);
 void receipt(people customer);
 
@@ -47,11 +49,12 @@ int main() {
 				cout << " You bought 64gb pendrive, pendrive mahal woo " << endl;
 			}
 
-			daftar(customer);
-			receipt(customer);
+			daftar(customer); // register user
+			receipt(customer); // receipt display
 		}
 		else if (status == 2) { // ADMIN PAGE
-			cout << "WELCOME TO ADMIN PAGE" << endl; //will put function for admin(check stocks/check total profit)
+			adminPage();
+			displayAdminPage();  //will put function for admin(check stocks/check total profit)
 		}
 		else { // ERROR
 			if (cin.fail()) { //when input char on int variable
@@ -104,7 +107,7 @@ void buyersMenu() { //list barangan dijual (will put stocks later)
 	cout << "Headphones" << endl << endl; //later tambah
 }
 
-void daftar(people &customer) {
+void daftar(people &customer) { //customer registration
 
 	char daftar;
 
@@ -130,7 +133,61 @@ void daftar(people &customer) {
 	}
 }
 
-void receipt(people customer) {
+void adminPage() { //admin page (need to login first)
+
+	int count = 0, ch;
+	string adminPassword = "";
+
+	wrong:
+	cout << "_________________________________________________________________________________________________________" << endl;
+	cout << setw(60) << "ADMIN LOGIN PAGE " << endl;
+	cout << "_________________________________________________________________________________________________________" << endl;
+	cout << endl << " --------- P.A.S.S.W.O.R.D ----------- ";
+	cout << endl << "           : ";
+	while (ch = _getch()) { //assign ASCII value to ch
+		if (ch == 13) {  //13 is ENTER key in ASCII
+			if (adminPassword == "abc123") { //correct password
+				system("cls");
+				cout << endl << "ACCESS GRANTED" << endl;
+				system("pause");
+				system("cls");
+				break;
+			}
+
+			//wrong password
+			system("cls");
+			Beep(1000, 500);
+			cout << endl<<"INCORRECT ADMIN PASSWORD" << endl;
+			system("pause");
+			system("cls");
+			adminPassword = "";
+			goto wrong;
+		}
+		else if (ch == 8) { //8 is BACKSPACE key in ASCII
+			if (adminPassword.length() > 0) { //set condition blocking error while input
+				cout << "\b \b"; //buang * everytime tekan backspace
+				adminPassword.erase(adminPassword.length() - 1); //erase string length
+			}
+		}
+		else {
+			cout << "*";
+			adminPassword += ch;
+		}
+	}
+}
+
+void displayAdminPage() { //admin page ( to display stocks, number of buyers and so on)
+
+	cout << "_________________________________________________________________________________________________________" << endl;
+	cout << setw(60) << "ADMIN PAGE " << endl;
+	cout << "_________________________________________________________________________________________________________" << endl;
+	cout << "Stocks ada 23" << endl; //dummy
+	cout << "Stocks ada 23" << endl; //dummy
+	cout << "Stocks ada 23" << endl; //dummy
+	cout << "Stocks ada 23" << endl; //dummy
+}
+
+void receipt(people customer) { //receipt
 
 	cout << "\n===== RECEIPT =====" << endl;
 	cout << "customer name : " << customer.name << endl;
