@@ -107,7 +107,7 @@ void buyersMenu() { //list barangan dijual (will put stocks later)
 	cout << "Headphones" << endl << endl; //later tambah
 }
 
-void daftar(people &customer) { //customer registration
+void daftar(people &customer) { //customer registration /nanti kena pointer char dafter for if else receipt
 
 	char daftar;
 
