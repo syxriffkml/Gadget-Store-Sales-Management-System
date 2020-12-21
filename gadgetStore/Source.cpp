@@ -28,6 +28,14 @@ void receipt(people customer);
 
 int main() {
 
+	//fixed console size
+	HWND console = GetConsoleWindow();
+	RECT r;
+	GetWindowRect(console, &r); //stores the console's current dimensions
+
+	MoveWindow(console, r.left, r.top,900, 300, TRUE); // 900 width, 300 height
+	//end of fixedconsole size
+
 	int status;
 	char homepage, code[10];
 	people customer;
@@ -48,6 +56,8 @@ int main() {
 			else if (strcmp(code, "PEN02") == 0) {
 				cout << " You bought 64gb pendrive, pendrive mahal woo " << endl;
 			}
+			system("pause");
+			system("cls");
 
 			daftar(customer); // register user
 			receipt(customer); // receipt display
@@ -195,6 +205,4 @@ void receipt(people customer) { //receipt
 	cout << "customer phone number : " << customer.phonenum << endl;
 	cout << "customer bank name : " << customer.bankName << endl;
 	cout << "customer bank number : " << customer.bankNo << endl;
-
-
 }
