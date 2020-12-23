@@ -3,8 +3,8 @@
 #include <conio.h>
 #include <iomanip>
 #include <windows.h>
-#include <limits>
-#undef max
+#include <limits> //semata nak buat error
+#undef max 
 
 
 using namespace std;
