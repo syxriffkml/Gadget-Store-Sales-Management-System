@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <windows.h>
 #include <limits> //semata nak buat error
-#undef max 
+#undef max //semata nak buat error
 
 
 using namespace std;
@@ -18,9 +18,20 @@ struct people {
 	int bankNo = 0;
 };
 
+struct gadget {
+	string gadgetName;
+	string desc1;
+	string desc2;
+	string desc3;
+	int stock=0;
+	double price=0;
+	string gadgetCode;
+};
+
 //function prototype
 int homeDisplay();
-void buyersMenu();
+int gadgetTypeSelection();
+string buyersMenu(int , gadget []);
 void adminPage();
 void displayAdminPage();
 void daftar(people& customer);
@@ -33,28 +44,44 @@ int main() {
 	RECT r;
 	GetWindowRect(console, &r); //stores the console's current dimensions
 
-	MoveWindow(console, r.left, r.top,900, 300, TRUE); // 900 width, 300 height
-	//end of fixedconsole size
+	MoveWindow(console, r.left, r.top,950, 600, TRUE); // 950 width, 600 height
+	//end of fixed console size
 
-	int status;
-	char homepage, code[10];
+
+	int status, selection;
+	char homepage;
+	string code;
 	people customer;
+	gadget pendrive[] = {
+		{"Kingston 32 gb","32GB","70MB/s read","60mm x 21.2mm x 10mm",200,15.50,"P01"},
+		{"Kingston 64 gb","64GB","100MB/s read","60mm x 21.2mm x 10mm",150,28.00,"P02"}
+	};
+
+
+	//string pendrive[2][5]={}
 
 	do {
 
 		status=homeDisplay();
 
 		if (status == 1) { //BUYERS PAGE
-			buyersMenu();
-			cout << "ENTER PRODUCT CODE FOR ITEMS YOU WANT TO BUY : ";
-			cin.ignore();
-			cin.getline(code, 10);
-			cout << code << endl;
-			if (strcmp(code,"PEN01")==0) {
+			back:
+			selection = gadgetTypeSelection();
+			code = buyersMenu(selection,pendrive);
+			
+			
+			if ((code == "P01") || (code == "p01")) {
 				cout << " You bought 32gb pendrive " << endl;
 			}
-			else if (strcmp(code, "PEN02") == 0) {
+			else if ((code == "P02") || (code == "p02")) {
 				cout << " You bought 64gb pendrive, pendrive mahal woo " << endl;
+			}
+			else if ((code == "M01") || (code == "m01")) {
+				cout << " Peh beli mouse sial " << endl;
+			}
+			else {
+				system("cls");
+				goto back;
 			}
 			system("pause");
 			system("cls");
@@ -103,18 +130,80 @@ int homeDisplay() { // homepage
 	return s;
 }
 
-void buyersMenu() { //list barangan dijual (will put stocks later)
+int gadgetTypeSelection() { // homepage
 
-	cout << " ******************************************* CATEGORIES OF GADGET ******************************************* " << endl;
-	cout << "                                           -PENDRIVE-                                                      " << endl << endl;
-	cout << "          " << "|             Capacities : 32GB             |" << "     " << "|             Capacities : 64GB             |" << endl;
-	cout << "          " << "|            Speed : 100MB/s read           |" << "     " << "|            Speed : 100MB/s read           |" << endl;
-	cout << "          " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << "     " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << endl;
-	cout << "          " << "|             Price : RM15.50               |" << "     " << "|             Price : RM28.00               |" << endl;
-	cout << "          " << "|               CODE : PEN01                |" << "     " << "|               CODE : PEN02                |" << endl;
+	int selection;
+	
+	cout << "             CHOOSE TYPE OF GADGET " << endl;
+	cout << "1 - Pendrive" << endl;
+	cout << "2 - Mouse" << endl;
+	cout << "3 - Headphones" << endl;
+	cout << endl << " -----> :  ";
+	cin >> selection;
+	system("cls");
 
-	cout << "Mouse" << endl; //later tambah
-	cout << "Headphones" << endl << endl; //later tambah
+	return selection;
+}
+
+string buyersMenu(int selection,gadget pendrive[]) { 
+	 
+	string c;
+	
+	if (selection == 1) {
+		cout << " **************** CATEGORIES OF GADGET  **************** " << endl;
+		cout << "                        -PENDRIVE-                    " << endl << endl;
+		for (int i = 0; i < 2; i++) {
+			cout << "Name : "       << pendrive[i].gadgetName << endl;
+			cout << "Capacities : " << pendrive[i].desc1 << endl;
+			cout << "Speed : "      << pendrive[i].desc2 << endl;
+			cout << "Dimensions : " << pendrive[i].desc3 << endl;
+			cout << "Stock : "      << pendrive[i].stock << endl;
+			cout << "Price : "      << pendrive[i].price << endl;
+			cout << "Code : "       << pendrive[i].gadgetCode << endl << endl;
+		}
+	}if (selection == 2) {
+
+	}
+	else if (selection == 3) {
+
+	}
+	
+	/*
+	if (selection == 1) {
+		cout << " ******************************************* CATEGORIES OF GADGET ******************************************* " << endl;
+		cout << "                                           -PENDRIVE-                                                      " << endl << endl;
+		cout << "          " << "|             Capacities : 32GB             |" << "     " << "|             Capacities : 64GB             |" << endl;
+		cout << "          " << "|            Speed : 100MB/s read           |" << "     " << "|            Speed : 100MB/s read           |" << endl;
+		cout << "          " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << "     " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << endl;
+		cout << "          " << "|             Price : RM15.50               |" << "     " << "|             Price : RM28.00               |" << endl;
+		cout << "          " << "|                 CODE : P01                |" << "     " << "|                 CODE : P02                |" << endl;
+	}
+	else if (selection == 2) {
+		cout << " ******************************************* CATEGORIES OF GADGET ******************************************* " << endl;
+		cout << "                                           -Mouse-                                                      " << endl << endl;
+		cout << "          " << "|             Capacities : 32GB             |" << "     " << "|             Capacities : 64GB             |" << endl;
+		cout << "          " << "|            Speed : 100MB/s read           |" << "     " << "|            Speed : 100MB/s read           |" << endl;
+		cout << "          " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << "     " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << endl;
+		cout << "          " << "|             Price : RM15.50               |" << "     " << "|             Price : RM28.00               |" << endl;
+		cout << "          " << "|                 CODE : M01                |" << "     " << "|                 CODE : M02                |" << endl;
+	}
+	else if (selection == 3) {
+		cout << " ******************************************* CATEGORIES OF GADGET ******************************************* " << endl;
+		cout << "                                           -Headphones-                                                      " << endl << endl;
+		cout << "          " << "|             Capacities : 32GB             |" << "     " << "|             Capacities : 64GB             |" << endl;
+		cout << "          " << "|            Speed : 100MB/s read           |" << "     " << "|            Speed : 100MB/s read           |" << endl;
+		cout << "          " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << "     " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << endl;
+		cout << "          " << "|             Price : RM15.50               |" << "     " << "|             Price : RM28.00               |" << endl;
+		cout << "          " << "|                 CODE : H01                |" << "     " << "|                 CODE : H02                |" << endl;
+	}*/
+
+
+	cout << "ENTER PRODUCT CODE FOR ITEMS YOU WANT TO BUY " << endl;
+	cout << endl << " -----> :  ";
+	cin.ignore();
+	getline(cin,c);
+
+	return c;
 }
 
 void daftar(people &customer) { //customer registration /nanti kena pointer char dafter for if else receipt
