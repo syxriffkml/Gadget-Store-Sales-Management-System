@@ -10,14 +10,6 @@
 using namespace std;
 
 //struct
-struct people {
-	string name;
-	int age = 0;
-	string phonenum;
-	string bankName;
-	int bankNo = 0;
-};
-
 struct gadget {
 	string gadgetName;
 	string desc1;
@@ -35,7 +27,8 @@ int gadgetTypeSelection();
 string buyersMenu(int , gadget [], gadget[], gadget[], gadget[]);
 void kiraDuit(string, gadget[], gadget[], gadget[], gadget[],double&, int&);
 void adminPage();
-void displayAdminPage();
+void displayAdminPage(double);
+void receipt(string, double, gadget[], gadget[], gadget[], gadget[]);
 //void daftar(people& customer);
 //void receipt(people customer);
 
@@ -50,9 +43,8 @@ int main() {
 
 	int status, selection;
 	char homepage;
-	double sum=0.00;
+	double sum=0.00,sumAllBuyer = 0.00; //sum tu total harga buyer beli, sumAllBuyer tu total semua pembelian with receipt berlainan
 	string code;
-	people customer;
 	gadget pendrive[] = {
 		//{gadgetName, desc1, desc2, desc3, desc4, stock, price, gadgetCode};
 		{"Kingston 32 gb","32GB","70MB/s read","60mm x 21.2mm x 10mm","0",200,15.50,"P01"},
@@ -83,6 +75,7 @@ int main() {
 			int hehe = 0;
 			selection = gadgetTypeSelection();
 			code = buyersMenu(selection,pendrive, mouse, headphones, powerbank);
+			
 			kiraDuit(code,pendrive, mouse, headphones, powerbank,sum,hehe);
 			if (hehe == 1) { // bila input salah
 				system("pause");
@@ -95,7 +88,11 @@ int main() {
 				system("cls");
 				goto back;
 			}
-			cout << "\nTotal harga kena bayar : RM" << setprecision(2) << sum <<endl;
+			else {
+				system("cls");
+			}
+			receipt(code,sum, pendrive, mouse, headphones, powerbank);
+			
 			//PROBLEM : AFTER USER SAMA DAH BELI IN ONE RECEIPT, SUM MASIH KIRA
 
 			system("pause");
@@ -106,7 +103,7 @@ int main() {
 		}
 		else if (status == 2) { // ADMIN PAGE
 			adminPage();
-			displayAdminPage();  //will put function for admin(check stocks/check total profit)
+			displayAdminPage(sumAllBuyer);  //will put function for admin(check stocks/check total profit)
 		}
 		else { // ERROR
 			if (cin.fail()) { //when input char on int variable
@@ -120,6 +117,8 @@ int main() {
 			system("cls");
 		}
 
+		sumAllBuyer = sumAllBuyer + sum;
+		sum = 0.00;
 		cout << "\nBack to homepage ?(Y|N) " << endl;
 		cout << endl << " -----> :  ";
 		cin >> homepage;
@@ -174,7 +173,7 @@ string buyersMenu(int selection,gadget pendrive[], gadget mouse[], gadget headph
 			cout << "Speed : " << pendrive[i].desc2 << endl;
 			cout << "Dimensions : " << pendrive[i].desc3 << endl;
 			cout << "Stock : " << pendrive[i].stock << endl;
-			cout << "Price : " << pendrive[i].price << endl;
+			cout << "Price : " << setprecision(2) << fixed << pendrive[i].price << endl;
 			cout << "Code : " << pendrive[i].gadgetCode << endl << endl;
 		}
 	}else if (selection == 2) {
@@ -186,7 +185,7 @@ string buyersMenu(int selection,gadget pendrive[], gadget mouse[], gadget headph
 			cout << "Speed : " << mouse[i].desc2 << endl;
 			cout << "Dimensions : " << mouse[i].desc3 << endl;
 			cout << "Stock : " << mouse[i].stock << endl;
-			cout << "Price : " << mouse[i].price << endl;
+			cout << "Price : " << setprecision(2) << fixed << mouse[i].price << endl;
 			cout << "Code : " << mouse[i].gadgetCode << endl << endl;
 		}
 	}
@@ -198,7 +197,7 @@ string buyersMenu(int selection,gadget pendrive[], gadget mouse[], gadget headph
 			cout << "Existence of wires : " << headphones[i].desc1 << endl;
 			cout << "Dimension : " << headphones[i].desc2 << endl;
 			cout << "Stock : " << headphones[i].stock << endl;
-			cout << "Price : " << headphones[i].price << endl;
+			cout << "Price : " << setprecision(2) << fixed << headphones[i].price << endl;
 			cout << "Code : " << headphones[i].gadgetCode << endl << endl;
 		}
 	}
@@ -212,41 +211,11 @@ string buyersMenu(int selection,gadget pendrive[], gadget mouse[], gadget headph
 			cout << "Dimensions : " << powerbank[i].desc3 << endl;
 			cout << "Weight : " << powerbank[i].desc4 << endl;
 			cout << "Stock : " << powerbank[i].stock << endl;
-			cout << "Price : " << powerbank[i].price << endl;
+			cout << "Price : " << setprecision(2) << fixed << powerbank[i].price << endl;
 			cout << "Code : " << powerbank[i].gadgetCode << endl << endl;
 		}
 	}
 	
-	/*
-	if (selection == 1) {
-		cout << " ******************************************* CATEGORIES OF GADGET ******************************************* " << endl;
-		cout << "                                           -PENDRIVE-                                                      " << endl << endl;
-		cout << "          " << "|             Capacities : 32GB             |" << "     " << "|             Capacities : 64GB             |" << endl;
-		cout << "          " << "|            Speed : 100MB/s read           |" << "     " << "|            Speed : 100MB/s read           |" << endl;
-		cout << "          " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << "     " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << endl;
-		cout << "          " << "|             Price : RM15.50               |" << "     " << "|             Price : RM28.00               |" << endl;
-		cout << "          " << "|                 CODE : P01                |" << "     " << "|                 CODE : P02                |" << endl;
-	}
-	else if (selection == 2) {
-		cout << " ******************************************* CATEGORIES OF GADGET ******************************************* " << endl;
-		cout << "                                           -Mouse-                                                      " << endl << endl;
-		cout << "          " << "|             Capacities : 32GB             |" << "     " << "|             Capacities : 64GB             |" << endl;
-		cout << "          " << "|            Speed : 100MB/s read           |" << "     " << "|            Speed : 100MB/s read           |" << endl;
-		cout << "          " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << "     " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << endl;
-		cout << "          " << "|             Price : RM15.50               |" << "     " << "|             Price : RM28.00               |" << endl;
-		cout << "          " << "|                 CODE : M01                |" << "     " << "|                 CODE : M02                |" << endl;
-	}
-	else if (selection == 3) {
-		cout << " ******************************************* CATEGORIES OF GADGET ******************************************* " << endl;
-		cout << "                                           -Headphones-                                                      " << endl << endl;
-		cout << "          " << "|             Capacities : 32GB             |" << "     " << "|             Capacities : 64GB             |" << endl;
-		cout << "          " << "|            Speed : 100MB/s read           |" << "     " << "|            Speed : 100MB/s read           |" << endl;
-		cout << "          " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << "     " << "|     Dimensions : 60mm x 21.2mm x 10mm     |" << endl;
-		cout << "          " << "|             Price : RM15.50               |" << "     " << "|             Price : RM28.00               |" << endl;
-		cout << "          " << "|                 CODE : H01                |" << "     " << "|                 CODE : H02                |" << endl;
-	}*/
-
-
 	cout << "ENTER PRODUCT CODE FOR ITEMS YOU WANT TO BUY " << endl;
 	cout << endl << " -----> :  ";
 	cin.ignore();
@@ -302,33 +271,6 @@ void kiraDuit(string code, gadget pendrive[], gadget mouse[], gadget headphones[
 		hehe = 1;
 	}
 }
-
-
-/*void daftar(people &customer) { //customer registration /nanti kena pointer char dafter for if else receipt
-
-	char daftar;
-
-	cout << "Do you want to register as member ? (Y|N) : ";
-	cin >> daftar;
-	if ((daftar == 'Y') || (daftar == 'y')) {
-		cout << "\nPlease enter your name : ";
-		cin.ignore();
-		getline(cin, customer.name);
-		cout << "\nPlease enter your age : ";
-		cin >> customer.age;
-		cout << "\nPlease enter your phone number : ";
-		cin.ignore();
-		getline(cin, customer.phonenum);
-		cout << "\nPlease enter your bank account name : ";
-
-		getline(cin, customer.bankName);
-		cout << "\nPlease enter your bank account number : ";
-		cin >> customer.bankNo;
-	}
-	else {
-		cout << "\nHaha bodo tak register" << endl;
-	}
-}*/
 
 void adminPage() { //admin page (need to login first)
 
@@ -396,7 +338,7 @@ void adminPage() { //admin page (need to login first)
 	}
 }
 
-void displayAdminPage() { //admin page ( to display stocks, number of buyers and so on)
+void displayAdminPage(double sumAllBuyer) { //admin page ( to display stocks, number of buyers and so on)
 
 	cout << "_________________________________________________________________________________________________________" << endl;
 	cout << setw(60) << "ADMIN PAGE " << endl;
@@ -405,14 +347,41 @@ void displayAdminPage() { //admin page ( to display stocks, number of buyers and
 	cout << "Stocks ada 23" << endl; //dummy
 	cout << "Stocks ada 23" << endl; //dummy
 	cout << "Stocks ada 23" << endl; //dummy
+	cout << "TOTAL PROFIT : RM" << sumAllBuyer << setprecision(2) << fixed << endl;
 }
 
-/*void receipt(people customer) { //receipt
-
+void receipt(string code, double sum, gadget pendrive[], gadget mouse[], gadget headphones[], gadget powerbank[]) { //receipt
+	
 	cout << "\n===== RECEIPT =====" << endl;
-	cout << "customer name : " << customer.name << endl;
-	cout << "customer age : " << customer.age << endl;
-	cout << "customer phone number : " << customer.phonenum << endl;
-	cout << "customer bank name : " << customer.bankName << endl;
-	cout << "customer bank number : " << customer.bankNo << endl;
-}*/
+	for (int i = 0; i < 2; i++) { //for loop i<2 sebab these gadget ada 2 selection barang
+		if (code == pendrive[i].gadgetCode) {
+			cout << "Name : " << pendrive[i].gadgetName << endl;
+			cout << "Capacities : " << pendrive[i].desc1 << endl;
+			cout << "Speed : " << pendrive[i].desc2 << endl;
+			cout << "Dimensions : " << pendrive[i].desc3 << endl;
+		}
+		else if (code == powerbank[i].gadgetCode) {
+			cout << "Name : " << powerbank[i].gadgetName << endl;
+			cout << "Battery Capacities : " << powerbank[i].desc1 << endl;
+			cout << "Amount of Ports : " << powerbank[i].desc2 << endl;
+			cout << "Dimensions : " << powerbank[i].desc3 << endl;
+			cout << "Weight : " << powerbank[i].desc4 << endl;
+		}
+	}
+
+	for (int i = 0; i < 3; i++) {
+		if (code == mouse[i].gadgetCode) { //for loop i<3 sebab these gadget ada 3 selection barang
+			cout << "Name : " << mouse[i].gadgetName << endl;
+			cout << "Capacities : " << mouse[i].desc1 << endl;
+			cout << "Speed : " << mouse[i].desc2 << endl;
+			cout << "Dimensions : " << mouse[i].desc3 << endl;
+		}
+		else if (code == headphones[i].gadgetCode) {
+			cout << "Name : " << headphones[i].gadgetName << endl;
+			cout << "Existence of wires : " << headphones[i].desc1 << endl;
+			cout << "Dimension : " << headphones[i].desc2 << endl;
+		}
+	}
+
+	cout << "\nTotal harga kena bayar : RM" << setprecision(2) << fixed << sum << endl;
+}
