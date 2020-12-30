@@ -10,7 +10,7 @@
 using namespace std;
 
 //struct
-struct gadget {
+struct gadget { //syariff
 	string gadgetName;
 	string desc1;
 	string desc2;
@@ -29,11 +29,10 @@ void kiraDuit(string, gadget[], gadget[], gadget[], gadget[],double&, int&);
 void adminPage();
 void displayAdminPage(double);
 void receipt(string, double, gadget[], gadget[], gadget[], gadget[]);
-//void daftar(people& customer);
-//void receipt(people customer);
+
 
 int main() {
-	//fixed console size
+	//fixed console size   //syariff
 	HWND console = GetConsoleWindow();
 	RECT r;
 	GetWindowRect(console, &r); //stores the console's current dimensions
@@ -45,24 +44,24 @@ int main() {
 	char homepage;
 	double sum=0.00,sumAllBuyer = 0.00; //sum tu total harga buyer beli, sumAllBuyer tu total semua pembelian with receipt berlainan
 	string code;
-	gadget pendrive[] = {
+	gadget pendrive[] = { //syariff
 		//{gadgetName, desc1, desc2, desc3, desc4, stock, price, gadgetCode};
 		{"Kingston 32 gb","32GB","70MB/s read","60mm x 21.2mm x 10mm","0",200,15.50,"P01"},
 		{"Kingston 64 gb","64GB","100MB/s read","60mm x 21.2mm x 10mm","0",150,28.00,"P02"}
 	};
 	gadget mouse[] = { // natasha
-		{"HP","LED","WIRELESS","115mm x 45mm x 60mm","0",200,39.90,"M01"}, // natasha
-		{"Logitech","LASER","WIRELESS","115mm x 45mm x 60mm","0",150,59.00,"M02"}, // natasha
-		{"Dell","BALL","WIRED","115mm x 45mm x 60mm","0",180,30.00,"M03"} // natasha
+		{"HP","LED","WIRELESS","115mm x 45mm x 60mm","0",200,39.90,"M01"}, 
+		{"Logitech","LASER","WIRELESS","115mm x 45mm x 60mm","0",150,59.00,"M02"}, 
+		{"Dell","BALL","WIRED","115mm x 45mm x 60mm","0",180,30.00,"M03"} 
 	};
 	gadget headphones[] = { // natasha 
-		{"SONY","WIRELESS","188mm x 208mm x 90mm","0","0",100,189.80,"H01"}, // natasha
-		{"JBL","WIRELESS","188mm x 208mm x 85mm","0","0",70,250.00,"H02"}, // natasha
-		{"BOSE","WIRED","170mm x 200mm x 85mm","0","0",48,200.00,"H03"} // natasha
+		{"SONY","WIRELESS","188mm x 208mm x 90mm","0","0",100,189.80,"H01"}, 
+		{"JBL","WIRELESS","188mm x 208mm x 85mm","0","0",70,250.00,"H02"}, 
+		{"BOSE","WIRED","170mm x 200mm x 85mm","0","0",48,200.00,"H03"} 
 	};
 	gadget powerbank[] = { // natasha
-		{"XIAOMI","4000mAH","3","140mm x 62mm x 21mm","223",200,49.90,"B01"}, // natasha
-		{"PINENG","2000mAH","4","130mm x 60mm x 17mm","200",120,69.00,"B02"} // natasha
+		{"XIAOMI","4000mAH","3","140mm x 62mm x 21mm","223",200,49.90,"B01"}, 
+		{"PINENG","2000mAH","4","130mm x 60mm x 17mm","200",120,69.00,"B02"} 
 	};
 
 
@@ -77,14 +76,17 @@ int main() {
 			code = buyersMenu(selection,pendrive, mouse, headphones, powerbank);
 			
 			kiraDuit(code,pendrive, mouse, headphones, powerbank,sum,hehe);
-			if (hehe == 1) { // bila input salah
+			if (hehe == 5) { // bila input salah
 				system("pause");
 				system("cls");
 				goto back;
 			}
+
+			//KENA ADA FUNCTION UNTUK MASUKKAN INFO DALAM ARRAY LAIN SUPAYA RECEIPT KELUAR SEMUA
+
 			cout << "\nDo you want to buy another gadget? Click 1 if yes || Click 2 if no : ";
 			cin >> hehe;
-			if (hehe == 1) { // bila input salah
+			if (hehe == 1) { //bila input 1/yes
 				system("cls");
 				goto back;
 			}
@@ -128,8 +130,8 @@ int main() {
 	return 0;
 }
 
-
-int homeDisplay() { // homepage
+ 
+int homeDisplay() { // homepage //dida & natasha
 
 	int s;
 	cout << endl << "                                  WELCOME TO GADGET STORE !               " << endl;
@@ -144,7 +146,7 @@ int homeDisplay() { // homepage
 	return s;
 }
 
-int gadgetTypeSelection() { // homepage
+int gadgetTypeSelection() { // dida 
 
 	int selection;
 	
@@ -164,7 +166,7 @@ string buyersMenu(int selection,gadget pendrive[], gadget mouse[], gadget headph
 	 
 	string c;
 	
-	if (selection == 1) {
+	if (selection == 1) { //syariff
 		cout << " **************** CATEGORIES OF GADGET  **************** " << endl;
 		cout << "                        -PENDRIVE-                    " << endl << endl;
 		for (int i = 0; i < 2; i++) {
@@ -176,7 +178,7 @@ string buyersMenu(int selection,gadget pendrive[], gadget mouse[], gadget headph
 			cout << "Price : " << setprecision(2) << fixed << pendrive[i].price << endl;
 			cout << "Code : " << pendrive[i].gadgetCode << endl << endl;
 		}
-	}else if (selection == 2) {
+	}else if (selection == 2) { //natasha
 		cout << " **************** CATEGORIES OF GADGET  **************** " << endl;
 		cout << "                        -MOUSE-                    " << endl << endl;
 		for (int i = 0; i < 3; i++) {
@@ -189,7 +191,7 @@ string buyersMenu(int selection,gadget pendrive[], gadget mouse[], gadget headph
 			cout << "Code : " << mouse[i].gadgetCode << endl << endl;
 		}
 	}
-	else if (selection == 3) {
+	else if (selection == 3) { //natasha
 		cout << " **************** CATEGORIES OF GADGET  **************** " << endl;
 		cout << "                        -HEADPHONES-                    " << endl << endl;
 		for (int i = 0; i < 3; i++) {
@@ -201,7 +203,7 @@ string buyersMenu(int selection,gadget pendrive[], gadget mouse[], gadget headph
 			cout << "Code : " << headphones[i].gadgetCode << endl << endl;
 		}
 	}
-	else if (selection == 4) {
+	else if (selection == 4) { //natasha
 		cout << " **************** CATEGORIES OF GADGET  **************** " << endl;
 		cout << "                        -POWER BANK-                    " << endl << endl;
 		for (int i = 0; i < 2; i++) {
@@ -216,7 +218,7 @@ string buyersMenu(int selection,gadget pendrive[], gadget mouse[], gadget headph
 		}
 	}
 	
-	cout << "ENTER PRODUCT CODE FOR ITEMS YOU WANT TO BUY " << endl;
+	cout << "ENTER PRODUCT CODE FOR ITEMS YOU WANT TO BUY " << endl; //syariff
 	cout << endl << " -----> :  ";
 	cin.ignore();
 	getline(cin,c);
@@ -224,55 +226,55 @@ string buyersMenu(int selection,gadget pendrive[], gadget mouse[], gadget headph
 	return c;
 }
 
-void kiraDuit(string code, gadget pendrive[], gadget mouse[], gadget headphones[], gadget powerbank[], double& sum, int& hehe) {
+void kiraDuit(string code, gadget pendrive[], gadget mouse[], gadget headphones[], gadget powerbank[], double& sum, int& hehe) { //syariff
 
-	if ((code == "P01") || (code == "p01")) { //option pendrive
+	if ((code == "P01") /*|| (code == "p01")*/) { //option pendrive
 		pendrive[0].stock = pendrive[0].stock - 1;
 		sum = sum + pendrive[0].price;
 	}
-	else if ((code == "P02") || (code == "p02")) {
+	else if ((code == "P02") /*|| (code == "p02")*/) {
 		pendrive[1].stock = pendrive[1].stock - 1;
 		sum = sum + pendrive[1].price;
 	}
-	else if ((code == "M01") || (code == "m01")) { //option mouse
+	else if ((code == "M01") /*|| (code == "m01")*/) { //option mouse
 		mouse[0].stock = mouse[0].stock - 1;
 		sum = sum + mouse[0].price;
 	}
-	else if ((code == "M02") || (code == "m02")) {
+	else if ((code == "M02") /*|| (code == "m02")*/) {
 		mouse[1].stock = mouse[1].stock - 1;
 		sum = sum + mouse[1].price;
 	}
-	else if ((code == "M03") || (code == "m03")) {
+	else if ((code == "M03") /*|| (code == "m03")*/) {
 		mouse[2].stock = mouse[2].stock - 1;
 		sum = sum + mouse[2].price;
 	}
-	else if ((code == "H01") || (code == "h01")) { //option headphones
+	else if ((code == "H01") /*|| (code == "h01")*/) { //option headphones
 		headphones[0].stock = headphones[0].stock - 1;
 		sum = sum + headphones[0].price;
 	}
-	else if ((code == "H02") || (code == "h02")) {
+	else if ((code == "H02") /*|| (code == "h02")*/) {
 		headphones[1].stock = headphones[1].stock - 1;
 		sum = sum + headphones[1].price;
 	}
-	else if ((code == "H03") || (code == "h03")) {
+	else if ((code == "H03") /*|| (code == "h03")*/) {
 		headphones[2].stock = headphones[2].stock - 1;
 		sum = sum + headphones[2].price;
 	}
-	else if ((code == "B01") || (code == "b01")) {
+	else if ((code == "B01") /*|| (code == "b01")*/) {
 		powerbank[0].stock = powerbank[0].stock - 1;
 		sum = sum + powerbank[0].price;
 	}
-	else if ((code == "B02") || (code == "b02")) {
+	else if ((code == "B02") /*|| (code == "b02")*/) {
 		powerbank[1].stock = powerbank[1].stock - 1;
 		sum = sum + powerbank[1].price;
 	}
 	else {
 		cout << "Wrong code, try again. ";
-		hehe = 1;
+		hehe = 5;
 	}
 }
 
-void adminPage() { //admin page (need to login first)
+void adminPage() { //admin page (need to login first) //syariff
 
 	int count = 0, ch;
 	string adminPassword = "", adminUser;
@@ -286,14 +288,14 @@ void adminPage() { //admin page (need to login first)
 	cout << "\nADMIN PASSWORD ---> ";
 	while (ch = _getch()) { //assign ASCII value to ch
 		if (ch == 13) {  //13 is ENTER key in ASCII
-			if ((adminPassword == "abc123" && adminUser == "Tasha") || (adminPassword == "qwerty123" && adminUser == "Syarep")) { //correct password
+			if ((adminPassword == "abc123" && adminUser == "Tasha") || (adminPassword == "qwerty123" && adminUser == "Syarep") || (adminPassword == "Dida123" && adminUser == "Dida")) { //correct password
 				system("cls");
 				cout << endl << "ACCESS GRANTED" << endl;
 				system("pause");
 				system("cls");
 				break;
 			}
-			else if ((adminPassword != "abc123" && adminUser != "Tasha") || (adminPassword != "qwerty123" && adminUser != "Syarep")) {
+			else if ((adminPassword != "abc123" && adminUser != "Tasha") || (adminPassword != "qwerty123" && adminUser != "Syarep") || (adminPassword != "Dida123" && adminUser != "Dida")) {
 				//wrong password
 				system("cls");
 				Beep(1000, 500);
@@ -304,7 +306,7 @@ void adminPage() { //admin page (need to login first)
 				adminPassword = "";
 				goto wrong;
 			}
-			else if ((adminUser != "Tasha") || (adminUser != "Syarep")) {
+			else if ((adminUser != "Tasha") || (adminUser != "Syarep") || (adminUser != "Dida")) {
 				system("cls");
 				Beep(1000, 500);
 				cout << endl << "INCORRECT ADMIN USERNAME" << endl;
@@ -313,7 +315,7 @@ void adminPage() { //admin page (need to login first)
 				adminUser = "";
 				goto wrong;
 			}
-			else if((adminPassword != "abc123") || (adminPassword != "qwerty123")){
+			else if((adminPassword != "abc123") || (adminPassword != "qwerty123") || (adminPassword != "Dida123")){
 				system("cls");
 				Beep(1000, 500);
 				cout << endl << "INCORRECT ADMIN PASSWORD" << endl;
@@ -322,8 +324,6 @@ void adminPage() { //admin page (need to login first)
 				adminPassword = "";
 				goto wrong;
 			}
-
-			
 		}
 		else if (ch == 8) { //8 is BACKSPACE key in ASCII
 			if (adminPassword.length() > 0) { //set condition blocking error while input
@@ -338,7 +338,7 @@ void adminPage() { //admin page (need to login first)
 	}
 }
 
-void displayAdminPage(double sumAllBuyer) { //admin page ( to display stocks, number of buyers and so on)
+void displayAdminPage(double sumAllBuyer) { //admin page ( to display stocks, number of buyers and so on) //syariff
 
 	cout << "_________________________________________________________________________________________________________" << endl;
 	cout << setw(60) << "ADMIN PAGE " << endl;
@@ -353,14 +353,14 @@ void displayAdminPage(double sumAllBuyer) { //admin page ( to display stocks, nu
 void receipt(string code, double sum, gadget pendrive[], gadget mouse[], gadget headphones[], gadget powerbank[]) { //receipt
 	
 	cout << "\n===== RECEIPT =====" << endl;
-	for (int i = 0; i < 2; i++) { //for loop i<2 sebab these gadget ada 2 selection barang
-		if (code == pendrive[i].gadgetCode) {
+	for (int i = 0; i < 2; i++) { //for loop i < 2 sebab these gadget ada 2 selection barang
+		if (code == pendrive[i].gadgetCode) { //syariff
 			cout << "Name : " << pendrive[i].gadgetName << endl;
 			cout << "Capacities : " << pendrive[i].desc1 << endl;
 			cout << "Speed : " << pendrive[i].desc2 << endl;
 			cout << "Dimensions : " << pendrive[i].desc3 << endl;
 		}
-		else if (code == powerbank[i].gadgetCode) {
+		else if (code == powerbank[i].gadgetCode) { //dida
 			cout << "Name : " << powerbank[i].gadgetName << endl;
 			cout << "Battery Capacities : " << powerbank[i].desc1 << endl;
 			cout << "Amount of Ports : " << powerbank[i].desc2 << endl;
@@ -369,14 +369,14 @@ void receipt(string code, double sum, gadget pendrive[], gadget mouse[], gadget 
 		}
 	}
 
-	for (int i = 0; i < 3; i++) {
-		if (code == mouse[i].gadgetCode) { //for loop i<3 sebab these gadget ada 3 selection barang
+	for (int i = 0; i < 3; i++) { //for loop i < 3 sebab these gadget ada 3 selection barang
+		if (code == mouse[i].gadgetCode) { //syariff
 			cout << "Name : " << mouse[i].gadgetName << endl;
 			cout << "Capacities : " << mouse[i].desc1 << endl;
 			cout << "Speed : " << mouse[i].desc2 << endl;
 			cout << "Dimensions : " << mouse[i].desc3 << endl;
 		}
-		else if (code == headphones[i].gadgetCode) {
+		else if (code == headphones[i].gadgetCode) { //dida
 			cout << "Name : " << headphones[i].gadgetName << endl;
 			cout << "Existence of wires : " << headphones[i].desc1 << endl;
 			cout << "Dimension : " << headphones[i].desc2 << endl;
