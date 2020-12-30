@@ -6,7 +6,6 @@
 #include <limits> //semata nak buat error
 #undef max //semata nak buat error
 
-
 using namespace std;
 
 //struct
@@ -65,7 +64,7 @@ int main() {
 	};
 
 
-	do {
+	do { // syariff
 
 		status=homeDisplay();
 
@@ -74,7 +73,6 @@ int main() {
 			int hehe = 0;
 			selection = gadgetTypeSelection();
 			code = buyersMenu(selection,pendrive, mouse, headphones, powerbank);
-			
 			kiraDuit(code,pendrive, mouse, headphones, powerbank,sum,hehe);
 			if (hehe == 5) { // bila input salah
 				system("pause");
@@ -94,14 +92,8 @@ int main() {
 				system("cls");
 			}
 			receipt(code,sum, pendrive, mouse, headphones, powerbank);
-			
-			//PROBLEM : AFTER USER SAMA DAH BELI IN ONE RECEIPT, SUM MASIH KIRA
-
 			system("pause");
 			system("cls");
-
-			//daftar(customer); // register user
-			//receipt(customer); // receipt display
 		}
 		else if (status == 2) { // ADMIN PAGE
 			adminPage();
@@ -128,7 +120,7 @@ int main() {
 	} while ((homepage == 'Y') || (homepage == 'y'));     //after all the buyers dah beli barang, boleh tekan Y, gi hompage and tukar kepada admin
 
 	return 0;
-}
+} //syariff
 
  
 int homeDisplay() { // homepage //dida & natasha
