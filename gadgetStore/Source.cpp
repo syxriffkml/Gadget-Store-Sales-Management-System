@@ -28,7 +28,7 @@ string buyersMenu(int , gadget [], gadget[], gadget[], gadget[]);
 void kiraDuit(string, gadget[], gadget[], gadget[], gadget[],double&, int&,ofstream&);
 void adminPage(int &);
 void displayAdminPage(double);
-void receipt(string, double, gadget[], gadget[], gadget[], gadget[], ifstream&,int);
+void receipt(double , ifstream& , int );
 
 
 int main() {
@@ -90,7 +90,7 @@ int main() {
 				system("cls");
 			}
 			// FUNCTION FOR DISCOUNT : MEMBERSHIP/ COUPON CODE WHATEVER LAH HAHAHA
-			receipt(code,sum, pendrive, mouse, headphones, powerbank,readDisplay,customer);
+			receipt(sum,readDisplay,customer);
 			system("pause");
 			system("cls");
 		}
@@ -460,12 +460,12 @@ void displayAdminPage(double sumAllBuyer) { //admin page ( to display stocks, nu
 	cout << "TOTAL PROFIT : RM" << sumAllBuyer << setprecision(2) << fixed << endl;
 }
 
-void receipt(string code, double sum, gadget pendrive[], gadget mouse[], gadget headphones[], gadget powerbank[],ifstream& readDisplay,int customer) { //receipt
+void receipt(double sum,ifstream& readDisplay,int customer) { //receipt
 	
 	string line;
 
 	cout << "\n===== RECEIPT =====" << endl;
-	cout << "CUSTOMER NO :" << customer << endl<<endl;
+	cout << "CUSTOMER NO :" << customer << endl<<endl; 
 	//Loop from receipt.txt
 	while (getline(readDisplay, line)) {
 		// Output the text from the file
