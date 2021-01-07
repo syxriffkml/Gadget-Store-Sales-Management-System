@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <conio.h>
 #include <iomanip>
@@ -24,11 +25,10 @@ struct gadget { //syariff
 int homeDisplay();
 int gadgetTypeSelection();
 string buyersMenu(int , gadget [], gadget[], gadget[], gadget[]);
-void kiraDuit(string, gadget[], gadget[], gadget[], gadget[],double&, int&);
-void assignReceipt(string, gadget[], gadget[], gadget[], gadget[]);
+void kiraDuit(string, gadget[], gadget[], gadget[], gadget[],double&, int&,ofstream&);
 void adminPage(int &);
 void displayAdminPage(double);
-void receipt(string, double, gadget[], gadget[], gadget[], gadget[]);
+void receipt(string, double, gadget[], gadget[], gadget[], gadget[], ifstream&,int);
 
 
 int main() {
@@ -39,7 +39,8 @@ int main() {
 	MoveWindow(console, r.left, r.top,950, 600, TRUE); // 950 width, 600 height
 	//end of fixed console size
 
-
+	ofstream inOut("receipt.txt", ios::trunc);
+	ifstream readDisplay("receipt.txt");
 	int status, selection, count=0;
 	char homepage;
 	double sum=0.00,sumAllBuyer = 0.00; //sum tu total harga buyer beli, sumAllBuyer tu total semua pembelian with receipt berlainan
@@ -64,7 +65,7 @@ int main() {
 		{"PINENG","2000mAH","4","130mm x 60mm x 17mm","200",120,69.00,"B02"} 
 	};
 
-
+	int customer = 1;
 	do { // syariff
 		home:
 		status=homeDisplay();
@@ -73,16 +74,12 @@ int main() {
 			int hehe = 0;
 			selection = gadgetTypeSelection();
 			code = buyersMenu(selection,pendrive, mouse, headphones, powerbank);
-			kiraDuit(code,pendrive, mouse, headphones, powerbank,sum,hehe);
+			kiraDuit(code,pendrive, mouse, headphones, powerbank,sum,hehe,inOut);
 			if (hehe == 5) { // bila input salah
 				system("pause");
 				system("cls");
 				goto back;
 			}
-
-			assignReceipt(code, pendrive, mouse, headphones, powerbank);
-			//KENA ADA FUNCTION UNTUK MASUKKAN INFO DALAM ARRAY LAIN SUPAYA RECEIPT KELUAR SEMUA
-			
 			cout << "\nDo you want to buy another gadget? Click 1 if yes || Click 2 if no : ";
 			cin >> hehe;
 			if (hehe == 1) { //bila input 1/yes
@@ -92,7 +89,8 @@ int main() {
 			else {
 				system("cls");
 			}
-			receipt(code,sum, pendrive, mouse, headphones, powerbank);
+			// FUNCTION FOR DISCOUNT : MEMBERSHIP/ COUPON CODE WHATEVER LAH HAHAHA
+			receipt(code,sum, pendrive, mouse, headphones, powerbank,readDisplay,customer);
 			system("pause");
 			system("cls");
 		}
@@ -103,7 +101,6 @@ int main() {
 				goto home;
 			}
 			displayAdminPage(sumAllBuyer);  //will put function for admin(check stocks/check total profit)
-			
 		}
 		else { // ERROR
 			if (cin.fail()) { //when input char on int variable
@@ -122,9 +119,17 @@ int main() {
 		cout << "\nBack to homepage ?(Y|N) " << endl;
 		cout << endl << " -----> :  ";
 		cin >> homepage;
+		if (homepage == 'Y' || homepage == 'y') {
+			// .clear() untuk buang customer lama punya receipt display
+			inOut.clear();
+			readDisplay.clear();
+			customer++;
+		}
 		system("cls");
 	} while ((homepage == 'Y') || (homepage == 'y'));     //after all the buyers dah beli barang, boleh tekan Y, gi hompage and tukar kepada admin
 
+	inOut.close();
+	readDisplay.close();
 	return 0;
 } //syariff
 
@@ -188,8 +193,8 @@ string buyersMenu(int selection,gadget pendrive[], gadget mouse[], gadget headph
 		cout << "                        -MOUSE-                    " << endl << endl;
 		for (int i = 0; i < 3; i++) {
 			cout << "Name : " << mouse[i].gadgetName << endl;
-			cout << "Capacities : " << mouse[i].desc1 << endl;
-			cout << "Speed : " << mouse[i].desc2 << endl;
+			cout << "Sensing Type : " << mouse[i].desc1 << endl;
+			cout << "Existence of wire  : " << mouse[i].desc2 << endl;
 			cout << "Dimensions : " << mouse[i].desc3 << endl;
 			if (mouse[i].stock == 0) {
 				cout << "Stock : " << "UNAVAILABLE" << endl;
@@ -238,7 +243,7 @@ string buyersMenu(int selection,gadget pendrive[], gadget mouse[], gadget headph
 		}
 	}
 	
-	cout << "ENTER PRODUCT CODE FOR ITEMS YOU WANT TO BUY " << endl; //syariff
+	cout << "ENTER PRODUCT CODE FOR ITEMS YOU WANT TO BUY (MAKE SURE THE CODES IN CAPITAL LETTER)" << endl; //syariff
 	cout << endl << " -----> :  ";
 	cin.ignore();
 	getline(cin,c);
@@ -246,7 +251,7 @@ string buyersMenu(int selection,gadget pendrive[], gadget mouse[], gadget headph
 	return c;
 }
 
-void kiraDuit(string code, gadget pendrive[], gadget mouse[], gadget headphones[], gadget powerbank[], double& sum, int& hehe) { //syariff
+void kiraDuit(string code, gadget pendrive[], gadget mouse[], gadget headphones[], gadget powerbank[], double& sum, int& hehe, ofstream& inOut) { //syariff
 
 	if ((code == "P01") /*|| (code == "p01")*/) { //option pendrive
 		if (pendrive[0].stock == 0) {
@@ -255,74 +260,133 @@ void kiraDuit(string code, gadget pendrive[], gadget mouse[], gadget headphones[
 		else {
 			pendrive[0].stock = pendrive[0].stock - 1;
 			sum = sum + pendrive[0].price;
+			inOut << "Name : " << pendrive[0].gadgetName << endl;
+			inOut << "Capacities : " << pendrive[0].desc1 << endl;
+			inOut << "Speed : " << pendrive[0].desc2 << endl;
+			inOut << "Dimensions : " << pendrive[0].desc3 << endl << endl;
 		}
 	}
 	else if ((code == "P02") /*|| (code == "p02")*/) {
-		pendrive[1].stock = pendrive[1].stock - 1;
-		sum = sum + pendrive[1].price;
+		if (pendrive[1].stock == 0) {
+			cout << "THE ITEM FOR CODE " << code << " (" << pendrive[1].gadgetName << ") IS UNAVAILABLE" << endl;
+		}
+		else {
+			pendrive[1].stock = pendrive[1].stock - 1;
+			sum = sum + pendrive[1].price;
+			inOut << "Name : " << pendrive[1].gadgetName << endl;
+			inOut << "Capacities : " << pendrive[1].desc1 << endl;
+			inOut << "Speed : " << pendrive[1].desc2 << endl;
+			inOut << "Dimensions : " << pendrive[1].desc3 << endl << endl;
+		}
 	}
 	else if ((code == "M01") /*|| (code == "m01")*/) { //option mouse
-		mouse[0].stock = mouse[0].stock - 1;
-		sum = sum + mouse[0].price;
+		if (mouse[0].stock == 0) {
+			cout << "THE ITEM FOR CODE " << code << " (" << mouse[0].stock << ") IS UNAVAILABLE" << endl;
+		}
+		else {
+			mouse[0].stock = mouse[0].stock - 1;
+			sum = sum + mouse[0].price;
+			inOut << "Name : " << mouse[0].gadgetName << endl;
+			inOut << "Sensing Type : " << mouse[0].desc1 << endl;
+			inOut << "Existence of wire  : " << mouse[0].desc2 << endl;
+			inOut << "Dimensions : " << mouse[0].desc3 << endl << endl;
+		}
 	}
 	else if ((code == "M02") /*|| (code == "m02")*/) {
-		mouse[1].stock = mouse[1].stock - 1;
-		sum = sum + mouse[1].price;
+		if (mouse[1].stock == 0) {
+			cout << "THE ITEM FOR CODE " << code << " (" << mouse[1].stock << ") IS UNAVAILABLE" << endl;
+		}
+		else {
+			mouse[1].stock = mouse[1].stock - 1;
+			sum = sum + mouse[1].price;
+			inOut << "Name : " << mouse[1].gadgetName << endl;
+			inOut << "Sensing Type : " << mouse[1].desc1 << endl;
+			inOut << "Existence of wire  : " << mouse[1].desc2 << endl;
+			inOut << "Dimensions : " << mouse[1].desc3 << endl << endl;
+		}
 	}
 	else if ((code == "M03") /*|| (code == "m03")*/) {
-		mouse[2].stock = mouse[2].stock - 1;
-		sum = sum + mouse[2].price;
+		if (mouse[2].stock == 0) {
+			cout << "THE ITEM FOR CODE " << code << " (" << mouse[2].stock << ") IS UNAVAILABLE" << endl;
+		}
+		else {
+			mouse[2].stock = mouse[2].stock - 1;
+			sum = sum + mouse[2].price;
+			inOut << "Name : " << mouse[2].gadgetName << endl;
+			inOut << "Sensing Type : " << mouse[2].desc1 << endl;
+			inOut << "Existence of wire  : " << mouse[2].desc2 << endl;
+			inOut << "Dimensions : " << mouse[2].desc3 << endl << endl;
+		}
 	}
 	else if ((code == "H01") /*|| (code == "h01")*/) { //option headphones
-		headphones[0].stock = headphones[0].stock - 1;
-		sum = sum + headphones[0].price;
+		
+		if (headphones[0].stock == 0) {
+			cout << "THE ITEM FOR CODE " << code << " (" << headphones[0].stock << ") IS UNAVAILABLE" << endl;
+		}
+		else {
+			headphones[0].stock = headphones[0].stock - 1;
+			sum = sum + headphones[0].price;
+			inOut << "Name : " << headphones[0].gadgetName << endl;
+			inOut << "Existence of wires : " << headphones[0].desc1 << endl;
+			inOut << "Dimension : " << headphones[0].desc2 << endl;
+		}
 	}
 	else if ((code == "H02") /*|| (code == "h02")*/) {
-		headphones[1].stock = headphones[1].stock - 1;
-		sum = sum + headphones[1].price;
+		if (headphones[1].stock == 0) {
+			cout << "THE ITEM FOR CODE " << code << " (" << headphones[1].stock << ") IS UNAVAILABLE" << endl;
+		}
+		else {
+			headphones[1].stock = headphones[1].stock - 1;
+			sum = sum + headphones[1].price;
+			inOut << "Name : " << headphones[1].gadgetName << endl;
+			inOut << "Existence of wires : " << headphones[1].desc1 << endl;
+			inOut << "Dimension : " << headphones[1].desc2 << endl;
+		}
 	}
 	else if ((code == "H03") /*|| (code == "h03")*/) {
-		headphones[2].stock = headphones[2].stock - 1;
-		sum = sum + headphones[2].price;
+		if (headphones[2].stock == 0) {
+			cout << "THE ITEM FOR CODE " << code << " (" << headphones[2].stock << ") IS UNAVAILABLE" << endl;
+		}
+		else {
+			headphones[2].stock = headphones[2].stock - 1;
+			sum = sum + headphones[2].price;
+			inOut << "Name : " << headphones[2].gadgetName << endl;
+			inOut << "Existence of wires : " << headphones[2].desc1 << endl;
+			inOut << "Dimension : " << headphones[2].desc2 << endl;
+		}
 	}
-	else if ((code == "B01") /*|| (code == "b01")*/) {
-		powerbank[0].stock = powerbank[0].stock - 1;
-		sum = sum + powerbank[0].price;
+	else if ((code == "B01") /*|| (code == "b01")*/) { // option powerbank
+		if (powerbank[0].stock == 0) {
+			cout << "THE ITEM FOR CODE " << code << " (" << powerbank[0].stock << ") IS UNAVAILABLE" << endl;
+		}
+		else {
+			powerbank[0].stock = powerbank[0].stock - 1;
+			sum = sum + powerbank[0].price;
+			inOut << "Name : " << powerbank[0].gadgetName << endl;
+			inOut << "Battery Capacities : " << powerbank[0].desc1 << endl;
+			inOut << "Amount of Ports : " << powerbank[0].desc2 << endl;
+			inOut << "Dimensions : " << powerbank[0].desc3 << endl;
+			inOut << "Weight : " << powerbank[0].desc4 << endl;
+		}
 	}
 	else if ((code == "B02") /*|| (code == "b02")*/) {
-		powerbank[1].stock = powerbank[1].stock - 1;
-		sum = sum + powerbank[1].price;
+		if (powerbank[1].stock == 0) {
+			cout << "THE ITEM FOR CODE " << code << " (" << powerbank[1].stock << ") IS UNAVAILABLE" << endl;
+		}
+		else {
+			powerbank[1].stock = powerbank[1].stock - 1;
+			sum = sum + powerbank[1].price;
+			inOut << "Name : " << powerbank[1].gadgetName << endl;
+			inOut << "Battery Capacities : " << powerbank[1].desc1 << endl;
+			inOut << "Amount of Ports : " << powerbank[1].desc2 << endl;
+			inOut << "Dimensions : " << powerbank[1].desc3 << endl;
+			inOut << "Weight : " << powerbank[1].desc4 << endl;
+		}
 	}
 	else {
 		cout << "Wrong code, try again. ";
 		hehe = 5;
 	}
-}
-void assignReceipt(string code, gadget pendrive[], gadget mouse[], gadget headphones[], gadget powerbank[]) {
-
-	string displayReceipt[50];
-
-	for (int i = 0; i < 2; i++) { //for loop i < 2 sebab these gadget ada 2 selection barang
-		if (code == pendrive[i].gadgetCode) { //syariff
-			
-		}
-		/*else if (code == powerbank[i].gadgetCode) { //dida
-			powerbank[i].gadgetName;
-			powerbank[i].desc1;
-			powerbank[i].desc2;
-			powerbank[i].desc3;
-			powerbank[i].desc4;
-		}*/
-	}
-
-	for (int i = 0; i < 2; i++)
-		for (int j = 0; j < 4; j++) {
-			displayReceipt[j] = pendrive[i].gadgetName;
-			displayReceipt[j] = pendrive[i].desc1;
-			displayReceipt[j] = pendrive[i].desc2;
-			displayReceipt[j] = pendrive[i].desc3;
-		}
-
 }
 
 void adminPage(int &count) { //admin page (need to login first) //syariff
@@ -351,6 +415,7 @@ void adminPage(int &count) { //admin page (need to login first) //syariff
 				adminUser = "";
 				adminPassword = "";
 				count++;
+				if (count == 3) {
 					system("cls");
 					Beep(1000, 500);
 					cout << endl << "YOU HAVE ENTERED INCORRECT ADMIN USERNAME / PASSWORD FOR 3 TIMES" << endl;
@@ -365,8 +430,8 @@ void adminPage(int &count) { //admin page (need to login first) //syariff
 					cout << endl << "INCORRECT ADMIN USERNAME / PASSWORD" << endl;
 					system("pause");
 					system("cls");
+					goto wrong;
 				}
-				goto wrong;if (count == 3) {
 				
 			}
 		}
@@ -395,38 +460,16 @@ void displayAdminPage(double sumAllBuyer) { //admin page ( to display stocks, nu
 	cout << "TOTAL PROFIT : RM" << sumAllBuyer << setprecision(2) << fixed << endl;
 }
 
-void receipt(string code, double sum, gadget pendrive[], gadget mouse[], gadget headphones[], gadget powerbank[]) { //receipt
+void receipt(string code, double sum, gadget pendrive[], gadget mouse[], gadget headphones[], gadget powerbank[],ifstream& readDisplay,int customer) { //receipt
 	
+	string line;
+
 	cout << "\n===== RECEIPT =====" << endl;
-	for (int i = 0; i < 2; i++) { //for loop i < 2 sebab these gadget ada 2 selection barang
-		if (code == pendrive[i].gadgetCode) { //syariff
-			cout << "Name : " << pendrive[i].gadgetName << endl;
-			cout << "Capacities : " << pendrive[i].desc1 << endl;
-			cout << "Speed : " << pendrive[i].desc2 << endl;
-			cout << "Dimensions : " << pendrive[i].desc3 << endl;
-		}
-		else if (code == powerbank[i].gadgetCode) { //dida
-			cout << "Name : " << powerbank[i].gadgetName << endl;
-			cout << "Battery Capacities : " << powerbank[i].desc1 << endl;
-			cout << "Amount of Ports : " << powerbank[i].desc2 << endl;
-			cout << "Dimensions : " << powerbank[i].desc3 << endl;
-			cout << "Weight : " << powerbank[i].desc4 << endl;
-		}
+	cout << "CUSTOMER NO :" << customer << endl<<endl;
+	//Loop from receipt.txt
+	while (getline(readDisplay, line)) {
+		// Output the text from the file
+		cout << line << endl;
 	}
-
-	for (int i = 0; i < 3; i++) { //for loop i < 3 sebab these gadget ada 3 selection barang
-		if (code == mouse[i].gadgetCode) { //syariff
-			cout << "Name : " << mouse[i].gadgetName << endl;
-			cout << "Capacities : " << mouse[i].desc1 << endl;
-			cout << "Speed : " << mouse[i].desc2 << endl;
-			cout << "Dimensions : " << mouse[i].desc3 << endl;
-		}
-		else if (code == headphones[i].gadgetCode) { //dida
-			cout << "Name : " << headphones[i].gadgetName << endl;
-			cout << "Existence of wires : " << headphones[i].desc1 << endl;
-			cout << "Dimension : " << headphones[i].desc2 << endl;
-		}
-	}
-
 	cout << "\nTotal harga kena bayar : RM" << setprecision(2) << fixed << sum << endl;
 }
