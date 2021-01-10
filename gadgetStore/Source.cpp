@@ -39,14 +39,14 @@ int main() {
 	MoveWindow(console, r.left, r.top,950, 600, TRUE); // 950 width, 600 height
 	//end of fixed console size
 
-	ofstream inOut("receipt.txt", ios::trunc);
-	ifstream readDisplay("receipt.txt");
+	ofstream inOut("receiptTemp.txt", ios::trunc); //masukkan data dalam file semata2 nak display gadget in receipt
+	ifstream readDisplay("receiptTemp.txt"); //read input to display gadget yg dibeli at receipt
 	int status, selection, count=0;
 	char homepage;
 	double sum=0.00,sumAllBuyer = 0.00; //sum tu total harga buyer beli, sumAllBuyer tu total semua pembelian with receipt berlainan
 	string code;
 	gadget pendrive[2] = { //syariff
-		//{gadgetName, desc1, desc2, desc3, desc4, stock, price, gadgetCode};
+		//{gadgetName, desc1, desc2, desc3, desc4, stock, price, gadgetCode};  -not needed desc put "0"
 		{"Kingston 32 gb","32GB","70MB/s read","60mm x 21.2mm x 10mm","0",2,15.50,"P01"},
 		{"Kingston 64 gb","64GB","100MB/s read","60mm x 21.2mm x 10mm","0",150,28.00,"P02"}
 	};
@@ -466,7 +466,7 @@ void receipt(double sum,ifstream& readDisplay,int customer) { //receipt
 
 	cout << "\n===== RECEIPT =====" << endl;
 	cout << "CUSTOMER NO :" << customer << endl<<endl; 
-	//Loop from receipt.txt
+	//Loop from receiptTemp.txt
 	while (getline(readDisplay, line)) {
 		// Output the text from the file
 		cout << line << endl;
