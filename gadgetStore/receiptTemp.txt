@@ -1,0 +1,6 @@
+Name : Kingston 64 gb
+Capacities : 64GB
+Speed : 100MB/s read
+Dimensions : 60mm x 21.2mm x 10mm
+Quantity bought : 1
+
