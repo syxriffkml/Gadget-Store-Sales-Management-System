@@ -153,8 +153,7 @@ int main() {
 
 		sumAllBuyer = sumAllBuyer + sum;
 		sum = 0.00;
-		cout << "\nBack to homepage ?(Y|N) " << endl;
-		cout << endl << " -----> :  ";
+		cout << endl << ifstream("interface/backToHomepage.txt").rdbuf();
 		cin >> homepage;
 		if (homepage == 'Y' || homepage == 'y') {
 			// .clear() untuk buang customer lama punya receipt display
@@ -598,7 +597,6 @@ displayAdmin:
 		cout << "\nTOTAL PROFIT : RM" << sumAllBuyer << setprecision(2) << fixed << endl;
 	}
 }
-
 
 void receipt(double sum, ifstream& readDisplay, int customer) { //receipt
 

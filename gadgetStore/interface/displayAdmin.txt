@@ -1,6 +1,7 @@
 				*********************************
-				*    1. Display / Add stocks    *   
-				*    2. Display Total Profit    *
+				*    1. Display / Add Stocks    *   
+				*    2. Display Total Sales     *
+				*    3. Display Total Profit    *
 				*********************************
 
 				Enter selection --------->   
