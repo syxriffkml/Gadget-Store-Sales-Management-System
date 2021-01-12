@@ -522,7 +522,7 @@ void displayAdminPage(double sumAllBuyer, string adminUser, gadget gajet[], ifst
 displayAdmin:
 	cout << endl << ifstream("interface/displayAdmin.txt").rdbuf();
 	cin >> adminSelect;
-	if (adminSelect != 1 && adminSelect != 2) {
+	if ((adminSelect != 1) && (adminSelect != 2) && (adminSelect != 3)) {
 		cout << setw(68) << "Please enter correct number selection!!" << endl;  //70
 		goto displayAdmin;
 	}
@@ -593,7 +593,7 @@ displayAdmin:
 	}
 	else if (adminSelect == 2) {
 		cout << "\nTOTAL SALES " << totalSales << endl;
-	}if (adminSelect == 3) { // Display total profit
+	}else if (adminSelect == 3) { // Display total profit
 		cout << "\nTOTAL PROFIT : RM" << sumAllBuyer << setprecision(2) << fixed << endl;
 	}
 }
