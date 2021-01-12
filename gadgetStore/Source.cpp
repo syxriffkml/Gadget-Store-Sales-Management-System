@@ -513,67 +513,66 @@ void displayAdminPage(double sumAllBuyer, string adminUser, gadget gajet[], ifst
 	cout << endl << ifstream("interface/displayAdmin.txt").rdbuf();
 	cin >> adminSelect;
 	if (adminSelect!= 1 && adminSelect!=2) {
-		cout << "Please enter correct number selection!" << endl;
+		cout << setw(68) << "Please enter correct number selection!!" << endl;  //70
 		goto displayAdmin;
 	}
 	
 	if (adminSelect == 1) {
 		stockAdmin:
-		cout << "\n1. Display all stocks data" << endl;
-		cout << "2. Display pendrive stocks data" << endl;
-		cout << "3. Display mouse stocks data" << endl;
-		cout << "4. Display headphone stocks data" << endl;
-		cout << "5. Display powerbank stocks data" << endl;
-		cout << "---------->";
+		cout << endl << ifstream("interface/displayAdminStock.txt").rdbuf();
 		cin >> selectStock;
 		if ((selectStock!= 1) && (selectStock != 2) && (selectStock != 3) && (selectStock != 4) && (selectStock != 5)) {
-			cout << "Please enter correct number selection!" << endl;
+			cout << "Please enter correct number selection!!" << endl;
 			goto stockAdmin;
 		}
 		//display all stocks data
-		cout << "=================================================================" << endl;
-		cout << " Gadget Code  |         Gadget Name           |  No. of stocks  |" << endl;
-		cout << "=================================================================" << endl;
+		cout << setw(82) << "=================================================================" << endl;
+		cout << setw(82) << "| Gadget Code |         Gadget Name           |  No. of stocks  |" << endl;
+		cout << setw(82) << "=================================================================" << endl;
 		for (int i = 0; i < 10; i++) {
 			if (selectStock == 1) {
-				cout << setw(13) << gajet[i].gadgetCode << " |" << setw(30) << gajet[i].gadgetName << " |" << setw(16) << gajet[i].stock << " |" << endl;
+				cout << setw(18) << "|"<< setw(12) << gajet[i].gadgetCode << " |" << setw(30) << gajet[i].gadgetName << " |" << setw(16) << gajet[i].stock << " |" << endl;
 			}
 			else if (selectStock == 2) {
 				if (gajet[i].type == "P") {
-					cout << setw(13) << gajet[i].gadgetCode << " |" << setw(30) << gajet[i].gadgetName << " |" << setw(16) << gajet[i].stock << " |" << endl;
+					cout << setw(18) << "|"<< setw(12) << gajet[i].gadgetCode << " |" << setw(30) << gajet[i].gadgetName << " |" << setw(16) << gajet[i].stock << " |" << endl;
 				}
 			}
 			else if (selectStock == 3) {
 				if (gajet[i].type == "M") {
-					cout << setw(13) << gajet[i].gadgetCode << " |" << setw(30) << gajet[i].gadgetName << " |" << setw(16) << gajet[i].stock << " |" << endl;
+					cout << setw(18) << "|"<< setw(12) << gajet[i].gadgetCode << " |" << setw(30) << gajet[i].gadgetName << " |" << setw(16) << gajet[i].stock << " |" << endl;
 				}
 			}
 			else if (selectStock == 4) {
 				if (gajet[i].type == "H") {
-					cout << setw(13) << gajet[i].gadgetCode << " |" << setw(30) << gajet[i].gadgetName << " |" << setw(16) << gajet[i].stock << " |" << endl;
+					cout << setw(18) << "|"<< setw(12) << gajet[i].gadgetCode << " |" << setw(30) << gajet[i].gadgetName << " |" << setw(16) << gajet[i].stock << " |" << endl;
 				}
 			}
 			else if (selectStock == 5) {
 				if (gajet[i].type == "B") {
-					cout << setw(13) << gajet[i].gadgetCode << " |" << setw(30) << gajet[i].gadgetName << " |" << setw(16) << gajet[i].stock << " |" << endl;
+					cout << setw(18) << "|"<< setw(12) << gajet[i].gadgetCode << " |" << setw(30) << gajet[i].gadgetName << " |" << setw(16) << gajet[i].stock << " |" << endl;
 				}
 			}
 		}
-		cout << "=================================================================" << endl << endl;
+		cout << setw(82) << "=================================================================" << endl << endl;
 		//end of display all stocks data
 
-		cout << "Do you want to add gadget item stocks (PRESS 1 - YES | PRESS 2 - NO)" << endl;
+		cout << setw(85) << "Do you want to add gadget item stocks (PRESS 1 - YES | PRESS 2 - NO)" << endl;
+		cout << setw(27) << "--------->";
 		cin >> selectAddStock;
 
 		if (selectAddStock == 1) {
 			//Add stocks
-			cout << "TYPE GADGET CODE FOR ITEM YOU WANT TO ADD STOCKS  : ";
+			cout << endl << setw(66) << "TYPE GADGET CODE FOR ITEM YOU WANT TO ADD STOCKS "<<endl;
+			cout << setw(27) << "--------->";
 			cin >> code;
 			for (int i = 0; i < 10; i++) {
 				if (code == gajet[i].gadgetCode) {
-					cout << "Add stocks : ";
+					cout << endl << setw(63)<< "Enter number of stocks to be added ---------> ";
 					cin >> addStocks;
 					gajet[i].stock = gajet[i].stock + addStocks;
+					cout << endl << setw(46) << "STOCKS ADDED FOR GADGET CODE " << gajet[i].gadgetCode;
+					cout << endl << setw(52) << "NEW NUMBER OF STOCKS FOR ITEM CODE " << gajet[i].gadgetCode << " IS " << gajet[i].stock << endl;
 				}
 			}
 			//End of add stocks
