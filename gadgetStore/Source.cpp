@@ -501,6 +501,7 @@ void displayAdminPage(double sumAllBuyer, gadget gajet[]) { //admin page ( to di
 	int addStocks = 0;
 	int selectStock = 0;
 	int adminSelect = 0;
+	int selectAddStock = 0;
 	string code;
 
 	cout << "_________________________________________________________________________________________________________" << endl;
@@ -559,17 +560,25 @@ void displayAdminPage(double sumAllBuyer, gadget gajet[]) { //admin page ( to di
 		cout << "=================================================================" << endl << endl;
 		//end of display all stocks data
 
-		//Add stocks
-		cout << "TYPE GADGET CODE FOR ITEM YOU WANT TO ADD STOCKS  : ";
-		cin >> code;
-		for (int i = 0; i < 10; i++) {
-			if (code == gajet[i].gadgetCode) {
-				cout << "Add stocks : ";
-				cin >> addStocks;
-				gajet[i].stock = gajet[i].stock + addStocks;
+		cout << "Do you want to add gadget item stocks (PRESS 1 - YES | PRESS 2 - NO)" << endl;
+		cin >> selectAddStock;
+
+		if (selectAddStock == 1) {
+			//Add stocks
+			cout << "TYPE GADGET CODE FOR ITEM YOU WANT TO ADD STOCKS  : ";
+			cin >> code;
+			for (int i = 0; i < 10; i++) {
+				if (code == gajet[i].gadgetCode) {
+					cout << "Add stocks : ";
+					cin >> addStocks;
+					gajet[i].stock = gajet[i].stock + addStocks;
+				}
 			}
+			//End of add stocks
 		}
-		//End of add stocks
+		else if(selectAddStock == 2) {
+			return;
+		}
 	}
 	else if (adminSelect == 2) {
 		cout << "\nTOTAL PROFIT : RM" << sumAllBuyer << setprecision(2) << fixed << endl;
