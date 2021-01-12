@@ -1,0 +1,6 @@
+				*********************************
+				*    1. Display / Add stocks    *   
+				*    2. Display Total Profit    *
+				*********************************
+
+				Enter selection --------->   

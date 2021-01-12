@@ -198,7 +198,7 @@ void writeIntoTemp(ofstream& tempGadget, ifstream& gadgetList, gadget gajet[], o
 	int result1 = rename("tempGadget.txt", "gadget.txt"); //rename the temp to text 
 	int result2 = rename("tempAdmin.txt", "admin.txt"); //rename the temp to text 
 	if (result1 == 0 && result2 == 0)
-		puts("File successfully renamed");
+		cout << endl << ifstream("interface/endProgram.txt").rdbuf();
 	else
 		perror("Error renaming file");
 }
@@ -217,13 +217,7 @@ int gadgetTypeSelection() { // dida
 
 	int selection;
 	do {
-		cout << "             CHOOSE TYPE OF GADGET " << endl;
-		cout << "1 - Pendrive" << endl;
-		cout << "2 - Mouse" << endl;
-		cout << "3 - Headphones" << endl;
-		cout << "4 - Powerbank" << endl;
-		cout << "ENTER NUMBER BASED ON TYPE OF GADGET" << endl;
-		cout << endl << " -----> :  ";
+		cout << endl << ifstream("interface/gadgetTypeSelection.txt").rdbuf();
 		cin >> selection;
 		system("cls");
 	} while ((selection != 1) && (selection != 2) && (selection != 3) && (selection != 4));
@@ -455,9 +449,7 @@ void adminLogin(int& count, string& adminUser) { //admin page (need to login fir
 	string adminPassword = "";
 
 	wrong:
-	cout << "_________________________________________________________________________________________________________" << endl;
-	cout << setw(60) << "ADMIN LOGIN PAGE " << endl;
-	cout << "_________________________________________________________________________________________________________" << endl;
+	cout << endl << ifstream("interface/adminLogin.txt").rdbuf();
 	cout << "\nADMIN USERNAME ---> ";
 	cin >> adminUser;
 	cout << "\nADMIN PASSWORD ---> ";
@@ -465,7 +457,7 @@ void adminLogin(int& count, string& adminUser) { //admin page (need to login fir
 		if (ch == 13) {  //13 is ENTER key in ASCII
 			if ((adminPassword == "abc123" && adminUser == "Tasha") || (adminPassword == "qwerty123" && adminUser == "Syarep") || (adminPassword == "Dida123" && adminUser == "Dida")) { //correct password
 				system("cls");
-				cout << endl << "ACCESS GRANTED" << endl;
+				cout << endl << ifstream("interface/adminLoginCorrect.txt").rdbuf() << endl << endl << endl << endl;
 				system("pause");
 				system("cls");
 				break;
@@ -478,8 +470,7 @@ void adminLogin(int& count, string& adminUser) { //admin page (need to login fir
 				if (count == 3) {
 					system("cls");
 					Beep(1000, 500);
-					cout << endl << "YOU HAVE ENTERED INCORRECT ADMIN USERNAME / PASSWORD FOR 3 TIMES" << endl;
-					cout << endl << "THE PROGRAM WILL GO BACK TO HOMEPAGE" << endl;
+					cout << endl << ifstream("interface/errorLogin2.txt").rdbuf() << endl << endl << endl << endl;
 					system("pause");
 					system("cls");
 					break;
@@ -487,7 +478,7 @@ void adminLogin(int& count, string& adminUser) { //admin page (need to login fir
 				else {
 					system("cls");
 					Beep(1000, 500);
-					cout << endl << "INCORRECT ADMIN USERNAME / PASSWORD" << endl;
+					cout << endl << ifstream("interface/errorLogin.txt").rdbuf() << endl <<endl << endl << endl;
 					system("pause");
 					system("cls");
 					goto wrong;
@@ -515,15 +506,11 @@ void displayAdminPage(double sumAllBuyer, string adminUser, gadget gajet[], ifst
 	int selectAddStock = 0; //tanya nak add stock atau tidak
 	string code,line;
 
-	cout << "_________________________________________________________________________________________________________" << endl;
-	cout << setw(60) << "ADMIN PAGE " << endl;
-	cout << "_________________________________________________________________________________________________________" << endl;
-	cout << "-----------------------------------> Welcome Admin "<< adminUser <<" <-----------------------------------" << endl << endl;
+	cout << endl << ifstream("interface/adminLogin.txt").rdbuf()<<endl;
+	cout << "         ----------------------------> Welcome Admin "<< adminUser <<" <---------------------------------" << endl << endl;
 
 	displayAdmin:
-	cout << "1. Display / Add stocks" << endl;
-	cout << "2. Display Total Profit" << endl;
-	cout << "---------->";
+	cout << endl << ifstream("interface/displayAdmin.txt").rdbuf();
 	cin >> adminSelect;
 	if (adminSelect!= 1 && adminSelect!=2) {
 		cout << "Please enter correct number selection!" << endl;
@@ -612,4 +599,3 @@ void receipt(double sum, ifstream& readDisplay, int customer) { //receipt
 	}
 	cout << "\nTotal harga kena bayar : RM" << setprecision(2) << fixed << sum << endl;
 }
-
