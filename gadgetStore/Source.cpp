@@ -28,30 +28,35 @@ int homeDisplay();
 int gadgetTypeSelection();
 string buyersMenu(int, gadget[]);
 void kiraDuit(string&, gadget[], double&, int&, ofstream&);
-void adminLogin(int&);
-void displayAdminPage(double, gadget[]);
+void adminLogin(int&, string&);
+void displayAdminPage(double,string, gadget[], ifstream&);
 void receipt(double, ifstream&, int);
-void writeIntoTemp(ofstream&, ifstream&, gadget[], ofstream&, ifstream&);
+void writeIntoTemp(ofstream&, ifstream&, gadget[], ofstream&, ifstream&, ofstream&, ifstream&, double&);
 
 
 int main() {
+
 	//fixed console size   //syariff
 	HWND console = GetConsoleWindow();
 	RECT r;
 	GetWindowRect(console, &r); //stores the console's current dimensions
-	MoveWindow(console, r.left, r.top, 950, 600, TRUE); // 950 width, 600 height
+	MoveWindow(console, r.left, r.top, 870, 600, TRUE); // 950 width, 600 height
 	//end of fixed console size
 
+	//Receipt display text file
 	ofstream inOut("receiptTemp.txt", ios::trunc); //masukkan data dalam file semata2 nak display gadget in receipt
 	ifstream readDisplay("receiptTemp.txt"); //read input to display gadget yg dibeli at receipt
-
+	//Read gadget text file
 	ifstream gadgetList("gadget.txt"); //read gadget items
 	ofstream tempGadget("tempGadget.txt"); //store gadget items then the file is renamed into main file
+	//Admin text file
+	ifstream Admin("admin.txt"); //read admin
+	ofstream TempAdmin("tempAdmin.txt"); //add total price into admin
 
-	int status, selection, count = 0;
+	int status, selection, count = 0,adminRepeat;
 	char homepage;
-	double sum = 0.00, sumAllBuyer = 0.00; //sum tu total harga buyer beli, sumAllBuyer tu total semua pembelian with receipt berlainan
-	string code;
+	double sum = 0.00, sumAllBuyer=0; //sum tu total harga buyer beli, sumAllBuyer tu total semua pembelian with receipt berlainan
+	string code,adminUser;
 
 	gadget gajet[10]; // 10 gadgets
 
@@ -77,6 +82,9 @@ int main() {
 		i++;
 	}
 
+	//loop to get data from textfile
+	Admin >> sumAllBuyer;
+	
 	int customer = 1;
 	do { // syariff
 		home:
@@ -107,15 +115,21 @@ int main() {
 			system("cls");
 		}
 		else if (status == 2) { // ADMIN PAGE
-			adminLogin(count);
+			adminLogin(count,adminUser);
 			if (count == 3) {
 				count = 0;
 				goto home;
 			}
-			displayAdminPage(sumAllBuyer, gajet);  //will put function for admin(check stocks/check total profit)
+			do {
+				displayAdminPage(sumAllBuyer,adminUser, gajet,Admin);  //will put function for admin(check stocks/check total profit)
+				cout << "Do you want to go back to admin page again? (PRESS 1 - YES | PRESS 2 - NO) :";
+				cin >> adminRepeat;
+				system("pause");
+				system("cls");
+			} while (adminRepeat == 1);
 		}
 		else if (status == 3) { // EXIT PROGRAM UWU
-			writeIntoTemp(tempGadget, gadgetList, gajet, inOut, readDisplay); // TO WRITE / CLOSE / REMOVE & RENAME TEXT FILE
+			writeIntoTemp(tempGadget, gadgetList, gajet, inOut, readDisplay, TempAdmin, Admin,sumAllBuyer); // TO WRITE / CLOSE / REMOVE & RENAME TEXT FILE
 			return 0;
 		}
 		else { // ERROR (SALAH INPUT TAK LETAK 1 OR 2 OR 3)
@@ -144,12 +158,12 @@ int main() {
 		system("cls");
 	} while ((homepage == 'Y') || (homepage == 'y'));     //after all the buyers dah beli barang, boleh tekan Y, gi hompage and tukar kepada admin
 
-	writeIntoTemp(tempGadget, gadgetList, gajet, inOut, readDisplay); // TO WRITE / CLOSE/ REMOVE & RENAME TEXT FILE
+	writeIntoTemp(tempGadget, gadgetList, gajet, inOut, readDisplay, TempAdmin, Admin,sumAllBuyer); // TO WRITE / CLOSE/ REMOVE & RENAME TEXT FILE
 
 	return 0;
 }
 
-void writeIntoTemp(ofstream& tempGadget, ifstream& gadgetList, gadget gajet[], ofstream& inOut, ifstream& readDisplay) {
+void writeIntoTemp(ofstream& tempGadget, ifstream& gadgetList, gadget gajet[], ofstream& inOut, ifstream& readDisplay, ofstream& TempAdmin, ifstream& Admin,double& sumAllBuyer) {
 
 	for (int i = 0; i < 10; i++) {
 		tempGadget << gajet[i].type;
@@ -170,15 +184,20 @@ void writeIntoTemp(ofstream& tempGadget, ifstream& gadgetList, gadget gajet[], o
 		tempGadget << ",";
 		tempGadget << gajet[i].gadgetCode << endl;
 	}
+	TempAdmin << sumAllBuyer;
 
+	Admin.close();
+	TempAdmin.close();
 	inOut.close();
 	readDisplay.close();
 	gadgetList.close();
 	tempGadget.close();
 
 	remove("gadget.txt");  //delete test file
-	int result = rename("tempGadget.txt", "gadget.txt"); //rename the temp to text 
-	if (result == 0)
+	remove("admin.txt");  //delete test file
+	int result1 = rename("tempGadget.txt", "gadget.txt"); //rename the temp to text 
+	int result2 = rename("tempAdmin.txt", "admin.txt"); //rename the temp to text 
+	if (result1 == 0 && result2 == 0)
 		puts("File successfully renamed");
 	else
 		perror("Error renaming file");
@@ -187,15 +206,7 @@ void writeIntoTemp(ofstream& tempGadget, ifstream& gadgetList, gadget gajet[], o
 int homeDisplay() { // homepage //dida & natasha
 
 	int s;
-	cout << endl << "                                  WELCOME TO GADGET STORE !               " << endl;
-	cout << endl << "          " << " -------------------------------- " << "------------------------------- ";
-	cout << endl << "          " << " |       PRESS 1 FOR BUYER      |" << " |      PRESS 2 FOR ADMIN      | ";
-	cout << endl << "          " << " -------------------------------- " << "------------------------------- " << endl;
-	cout << endl << "          " << "                       --------------------------                       ";
-	cout << endl << "          " << "                       |     PRESS 3 TO EXIT    |                       ";
-	cout << endl << "          " << "                       --------------------------                       ";
-	cout << endl << "=========>" << " PLEASE CHOOSE CAREFULLY SINCE THERE IS NO TURNING POINT PASS HERE <==========  ";
-	cout << endl << " -----> :  ";
+	cout << endl << ifstream("interface/homeDisplay.txt").rdbuf();
 	cin >> s;
 	system("cls");
 
@@ -339,7 +350,7 @@ startQuantity:
 					}
 					gajet[i].stock = gajet[i].stock - quantity;
 					sum = sum + (gajet[i].price * quantity);
-					inOut << "Name : " << gajet[i].gadgetName << endl;
+					inOut << "Name : " << gajet[i].gadgetName << endl;  //WRITE INTO FILE
 					inOut << "Capacities : " << gajet[i].desc1 << endl;
 					inOut << "Speed : " << gajet[i].desc2 << endl;
 					inOut << "Dimensions : " << gajet[i].desc3 << endl;
@@ -438,10 +449,10 @@ startQuantity:
 	}
 }
 
-void adminLogin(int& count) { //admin page (need to login first) //syariff
+void adminLogin(int& count, string& adminUser) { //admin page (need to login first) //syariff
 
 	int ch;
-	string adminPassword = "", adminUser;
+	string adminPassword = "";
 
 	wrong:
 	cout << "_________________________________________________________________________________________________________" << endl;
@@ -496,22 +507,28 @@ void adminLogin(int& count) { //admin page (need to login first) //syariff
 	}
 }
 
-void displayAdminPage(double sumAllBuyer, gadget gajet[]) { //admin page ( to display stocks, number of buyers and so on) 
+void displayAdminPage(double sumAllBuyer, string adminUser, gadget gajet[], ifstream& Admin) { //admin page ( to display stocks, number of buyers and so on) 
 
-	int addStocks = 0;
-	int selectStock = 0;
-	int adminSelect = 0;
-	int selectAddStock = 0;
-	string code;
+	int addStocks = 0; //add stock gadget
+	int selectStock = 0; //select nak display mana satu for stock
+	int adminSelect = 0; // select nak tengok stocks or total profit
+	int selectAddStock = 0; //tanya nak add stock atau tidak
+	string code,line;
 
 	cout << "_________________________________________________________________________________________________________" << endl;
 	cout << setw(60) << "ADMIN PAGE " << endl;
-	cout << "_________________________________________________________________________________________________________" << endl << endl << endl;
+	cout << "_________________________________________________________________________________________________________" << endl;
+	cout << "-----------------------------------> Welcome Admin "<< adminUser <<" <-----------------------------------" << endl << endl;
 
+	displayAdmin:
 	cout << "1. Display / Add stocks" << endl;
 	cout << "2. Display Total Profit" << endl;
 	cout << "---------->";
-	cin >> adminSelect;                        
+	cin >> adminSelect;
+	if (adminSelect!= 1 && adminSelect!=2) {
+		cout << "Please enter correct number selection!" << endl;
+		goto displayAdmin;
+	}
 	
 	if (adminSelect == 1) {
 		stockAdmin:
@@ -522,10 +539,8 @@ void displayAdminPage(double sumAllBuyer, gadget gajet[]) { //admin page ( to di
 		cout << "5. Display powerbank stocks data" << endl;
 		cout << "---------->";
 		cin >> selectStock;
-		if (cin.fail()) {
+		if ((selectStock!= 1) && (selectStock != 2) && (selectStock != 3) && (selectStock != 4) && (selectStock != 5)) {
 			cout << "Please enter correct number selection!" << endl;
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			goto stockAdmin;
 		}
 		//display all stocks data
@@ -580,9 +595,8 @@ void displayAdminPage(double sumAllBuyer, gadget gajet[]) { //admin page ( to di
 			return;
 		}
 	}
-	else if (adminSelect == 2) {
+	else if (adminSelect == 2) 
 		cout << "\nTOTAL PROFIT : RM" << sumAllBuyer << setprecision(2) << fixed << endl;
-	}
 }
 
 void receipt(double sum, ifstream& readDisplay, int customer) { //receipt
