@@ -10,14 +10,14 @@
 
 -------------------------------------->CHOOSE TYPE OF GADGET<------------------------------------------
 			
-				     **********************
-				     *		          *
-			             *   1 - Pendrive     * 
-				     *   2 - Mouse        *
-				     *   3 - Headphones   *
-				     *   4 - Powerbank    *
-				     *                    *
-				     **********************
+				      **********************
+				      *		           *
+			              *   1 - Pendrive     * 
+				      *   2 - Mouse        *
+				      *   3 - Headphones   *
+				      *   4 - Powerbank    *
+				      *                    *
+				      **********************
 
 				ENTER NUMBER BASED ON TYPE OF GADGET
 				Enter selection --------->
