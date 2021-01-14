@@ -1,4 +1,4 @@
-P,Kingston 32 gb,32GB,70MB/s read,60mm x 21.2mm x 10mm,XXX,2,15.5,P01,1
+P,Kingston 32 gb,32GB,70MB/s read,60mm x 21.2mm x 10mm,XXX,1,15.5,P01,2
 P,Kingston 64 gb,64GB,100MB/s read,60mm x 21.2mm x 10mm,XXX,136,28,P02,0
 M,HP,LED,WIRELESS,115mm x 45mm x 60mm,XXX,200,39.9,M01,0
 M,Logitech,LASER,WIRELESS,115mm x 45mm x 60mm,XXX,149,59,M02,3
