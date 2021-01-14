@@ -26,9 +26,9 @@ struct gadget { //syariff
 };
 
 //function prototype
-int homeDisplay();
-int gadgetTypeSelection();
-string buyersMenu(int, gadget[]);
+string homeDisplay();
+string gadgetTypeSelection();
+string buyersMenu(string, gadget[]);
 void kiraDuit(string&, gadget[], double&, int&, ofstream&,int&);
 void adminLogin(int&, string&);
 void displayAdminPage(double,string, gadget[], ifstream&, int&);
@@ -55,10 +55,10 @@ int main() {
 	ifstream Admin("admin.txt"); //read admin
 	ofstream TempAdmin("tempAdmin.txt"); //add total price into admin
 
-	int status, selection, count = 0,adminRepeat, totalSales=0;
+	int count = 0,adminRepeat, totalSales=0;
 	char homepage;
 	double sum = 0.00, sumAllBuyer=0; //sum tu total harga buyer beli, sumAllBuyer tu total semua pembelian with receipt berlainan
-	string code,adminUser;
+	string status,selection,code,adminUser;
 
 	gadget gajet[10]; // 10 gadgets
 
@@ -100,7 +100,7 @@ int main() {
 	do { // syariff
 		home:
 		status = homeDisplay();
-		if (status == 1) { //BUYERS PAGE
+		if (status == "1") { //BUYERS PAGE
 			back:
 			int hehe = 0;
 			selection = gadgetTypeSelection();
@@ -111,7 +111,8 @@ int main() {
 				system("cls");
 				goto back;
 			}
-			cout << "\nDo you want to buy another gadget? Click 1 if yes || Click 2 if no : ";
+			cout << "\nDo you want to buy another gadget? Click 1 if yes || Click 2 if no" << endl; //syariff
+			cout << endl << " ----->   ";
 			cin >> hehe;
 			if (hehe == 1) { //bila input 1/yes
 				system("cls");
@@ -125,7 +126,7 @@ int main() {
 			system("pause");
 			system("cls");
 		}
-		else if (status == 2) { // ADMIN PAGE
+		else if (status == "2") { // ADMIN PAGE
 			adminLogin(count,adminUser);
 			if (count == 3) {
 				count = 0;
@@ -139,12 +140,12 @@ int main() {
 				system("cls");
 			} while (adminRepeat == 1);
 		}
-		else if (status == 3) { // EXIT PROGRAM UWU
+		else if (status == "3") { // EXIT PROGRAM UWU
 			writeIntoTemp(tempGadget, gadgetList, gajet, inOut, readDisplay, TempAdmin, Admin,sumAllBuyer, totalSales); // TO WRITE / CLOSE / REMOVE & RENAME TEXT FILE
 			return 0;
 		}
 		else { // ERROR (SALAH INPUT TAK LETAK 1 OR 2 OR 3)
-			if (cin.fail()) { //when input char on int variable
+			if (cin.fail() && (status != "1") && (status != "2") && (status != "3")) { //when input char on int variable 
 				cin.clear();
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			}
@@ -215,9 +216,9 @@ void writeIntoTemp(ofstream& tempGadget, ifstream& gadgetList, gadget gajet[], o
 		perror("Error renaming file");
 }
 
-int homeDisplay() { // homepage //dida & natasha
+string homeDisplay() { // homepage //dida & natasha
 
-	int s;
+	string s;
 	cout << endl << ifstream("interface/homeDisplay.txt").rdbuf();
 	cin >> s;
 	system("cls");
@@ -225,30 +226,30 @@ int homeDisplay() { // homepage //dida & natasha
 	return s;
 }
 
-int gadgetTypeSelection() { // dida 
+string gadgetTypeSelection() { // dida 
 
-	int selection;
+	string selection;
 	do {
 		cout << endl << ifstream("interface/gadgetTypeSelection.txt").rdbuf();
 		cin >> selection;
 		system("cls");
-	} while ((selection != 1) && (selection != 2) && (selection != 3) && (selection != 4));
+	} while ((selection != "1") && (selection != "2") && (selection != "3") && (selection != "4"));
 
 	return selection;
 }
 
-string buyersMenu(int selection, gadget gajet[]) {
+string buyersMenu(string selection, gadget gajet[]) {
 
 	string c;
-
-	if (selection == 1) { //syariff
-		cout << " **************** CATEGORIES OF GADGET  **************** " << endl;
+	
+	if (selection == "1") { //syariff
+		cout << endl << ifstream("interface/buyersMenu.txt").rdbuf();
 		cout << "                        -PENDRIVE-                    " << endl << endl;
 		for (int i = 0; i < 10; i++) {
 			if (gajet[i].type == "P") {
 				cout << "Name : " << gajet[i].gadgetName << endl;
-				cout << "Capacities : " << gajet[i].desc1 << endl;
-				cout << "Speed : " << gajet[i].desc2 << endl;
+				cout <<"Capacities : " << gajet[i].desc1 << endl;
+				cout <<"Speed : " << gajet[i].desc2 << endl;
 				cout << "Dimensions : " << gajet[i].desc3 << endl;
 				if (gajet[i].stock == 0) {
 					cout << "Stock : " << "UNAVAILABLE" << endl;
@@ -261,8 +262,8 @@ string buyersMenu(int selection, gadget gajet[]) {
 			}
 		}
 	}
-	else if (selection == 2) { //natasha
-		cout << " **************** CATEGORIES OF GADGET  **************** " << endl;
+	else if (selection == "2") { //natasha
+		cout << endl << ifstream("interface/buyersMenu.txt").rdbuf();
 		cout << "                        -MOUSE-                    " << endl << endl;
 		for (int i = 0; i < 10; i++) {
 			if (gajet[i].type == "M") {
@@ -281,8 +282,8 @@ string buyersMenu(int selection, gadget gajet[]) {
 			}
 		}
 	}
-	else if (selection == 3) { //natasha
-		cout << " **************** CATEGORIES OF GADGET  **************** " << endl;
+	else if (selection == "3") { //natasha
+		cout << endl << ifstream("interface/buyersMenu.txt").rdbuf();
 		cout << "                        -HEADPHONES-                    " << endl << endl;
 		for (int i = 0; i < 10; i++) {
 			if (gajet[i].type == "H") {
@@ -300,8 +301,8 @@ string buyersMenu(int selection, gadget gajet[]) {
 			}
 		}
 	}
-	else if (selection == 4) { //natasha
-		cout << " **************** CATEGORIES OF GADGET  **************** " << endl;
+	else if (selection == "4") { //natasha
+		cout << endl << ifstream("interface/buyersMenu.txt").rdbuf();
 		cout << "                        -POWER BANK-                    " << endl << endl;
 		for (int i = 0; i < 10; i++) {
 			if (gajet[i].type == "B") {
@@ -323,10 +324,10 @@ string buyersMenu(int selection, gadget gajet[]) {
 	}
 
 	cout << "ENTER PRODUCT CODE FOR ITEMS YOU WANT TO BUY (MAKE SURE THE CODES IN CAPITAL LETTER)" << endl; //syariff
-	cout << endl << " -----> :  ";
+	cout << endl << " ----->   ";
 	cin.ignore();
 	getline(cin, c);
-
+	
 	return c;
 }
 
@@ -342,7 +343,8 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 					cout << "THE ITEM FOR CODE " << code << " (" << gajet[i].gadgetName << ") IS UNAVAILABLE" << endl;
 				}
 				else {
-					cout << "PLEASE ENTER QUANTITY :" << endl;
+					cout << "PLEASE ENTER QUANTITY :"<<endl;
+					cout << endl << " ----->   ";
 					cin >> quantity;
 					if ((gajet[i].stock - quantity) < 0) {
 						cout << "Please re-enter quantity because stock is not enough!" << endl;
@@ -452,10 +454,6 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 				}
 			}
 		}
-		else {
-			cout << "Wrong code, try again. ";
-			hehe = 5;
-		}
 	}
 }
 
@@ -522,11 +520,11 @@ void displayAdminPage(double sumAllBuyer, string adminUser, gadget gajet[], ifst
 	int selectAddStock = 0; //tanya nak add stock atau tidak
 	string code, line;
 
-	cout << endl << ifstream("interface/adminLogin.txt").rdbuf() << endl;
+	cout << endl << ifstream("interface/displayAdmin.txt").rdbuf() << endl;
 	cout << "         ----------------------------> Welcome Admin " << adminUser << " <---------------------------------" << endl << endl;
 
 	displayAdmin:
-	cout << endl << ifstream("interface/displayAdmin.txt").rdbuf();
+	cout << endl << ifstream("interface/displayAdminSelection.txt").rdbuf();
 	cin >> adminSelect;
 	if ((adminSelect != 1) && (adminSelect != 2) && (adminSelect != 3)) {
 		cout << setw(68) << "Please enter correct number selection!!" << endl;  //70
@@ -582,7 +580,7 @@ void displayAdminPage(double sumAllBuyer, string adminUser, gadget gajet[], ifst
 			cout << endl << setw(66) << "TYPE GADGET CODE FOR ITEM YOU WANT TO ADD STOCKS " << endl;
 			cout << setw(27) << "--------->";
 			cin >> code;
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < 10; i++) {  //Kalau letak code salah, dia x keluar
 				if (code == gajet[i].gadgetCode) {
 					cout << endl << setw(63) << "Enter number of stocks to be added ---------> ";
 					cin >> addStocks;
@@ -611,7 +609,7 @@ void displayAdminPage(double sumAllBuyer, string adminUser, gadget gajet[], ifst
 		cout << setw(64) << "|  TOTAL NO OF ITEMS SOLD :                   |" << setw(16) << totalSold << " |" << endl;
 		cout << setw(82) << "=================================================================" << endl << endl;
 	}else if (adminSelect == 3) { // Display total profit
-		cout << "\nTOTAL PROFIT : RM" << sumAllBuyer << setprecision(2) << fixed << endl;
+		cout << endl << setw(49) << "TOTAL PROFIT : RM" << setprecision(2) << fixed << sumAllBuyer << endl << endl << endl;
 	}
 }
 
