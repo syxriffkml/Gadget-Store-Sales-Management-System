@@ -8,6 +8,7 @@
 #include <cstdio> // utk pakai rename function to rename 
 #include <limits> //semata nak buat error
 #undef max //semata nak buat error
+
 using namespace std;
 
 //struct
@@ -21,6 +22,7 @@ struct gadget { //syariff
 	int stock = 0;
 	double price = 0;
 	string gadgetCode;
+	int stockSold = 0;
 };
 
 //function prototype
@@ -78,6 +80,8 @@ int main() {
 		getline(ss, myString, ',');  // to get double stock
 		gajet[i].price = stod(myString);
 		getline(ss, gajet[i].gadgetCode, ',');
+		getline(ss, myString, ','); //to get int stock
+		gajet[i].stockSold = stoi(myString);
 
 		i++;
 	}
@@ -188,7 +192,9 @@ void writeIntoTemp(ofstream& tempGadget, ifstream& gadgetList, gadget gajet[], o
 		tempGadget << ",";
 		tempGadget << gajet[i].price;
 		tempGadget << ",";
-		tempGadget << gajet[i].gadgetCode << endl;
+		tempGadget << gajet[i].gadgetCode;
+		tempGadget << ",";
+		tempGadget << gajet[i].stockSold << endl;
 	}
 	TempAdmin << sumAllBuyer<< "," << totalSales;
 
@@ -328,7 +334,7 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 
 	int quantity = 0;
 
-startQuantity:
+	startQuantity:
 	for (int i = 0; i < 10; i++) {
 		if (gajet[i].type == "P") { //PENDRIVE
 			if (code == gajet[i].gadgetCode) {
@@ -348,8 +354,8 @@ startQuantity:
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 						goto startQuantity;
 					}
-					totalSales = totalSales+quantity;
 					gajet[i].stock = gajet[i].stock - quantity;
+					gajet[i].stockSold = gajet[i].stockSold + quantity;
 					sum = sum + (gajet[i].price * quantity);
 					inOut << "Name : " << gajet[i].gadgetName << endl;  //WRITE INTO FILE
 					inOut << "Capacities : " << gajet[i].desc1 << endl;
@@ -377,8 +383,8 @@ startQuantity:
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 						goto startQuantity;
 					}
-					totalSales = totalSales + quantity;
 					gajet[i].stock = gajet[i].stock - quantity;
+					gajet[i].stockSold = gajet[i].stockSold + quantity;
 					sum = sum + (gajet[i].price * quantity);
 					inOut << "Name : " << gajet[i].gadgetName << endl;
 					inOut << "Sensing Type : " << gajet[i].desc1 << endl;
@@ -406,8 +412,8 @@ startQuantity:
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 						goto startQuantity;
 					}
-					totalSales = totalSales + quantity;
 					gajet[i].stock = gajet[i].stock - quantity;
+					gajet[i].stockSold = gajet[i].stockSold + quantity;
 					sum = sum + (gajet[i].price * quantity);
 					inOut << "Name : " << gajet[i].gadgetName << endl;
 					inOut << "Existence of wires : " << gajet[i].desc1 << endl;
@@ -434,8 +440,8 @@ startQuantity:
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 						goto startQuantity;
 					}
-					totalSales = totalSales + quantity;
 					gajet[i].stock = gajet[i].stock - quantity;
+					gajet[i].stockSold = gajet[i].stockSold + quantity;
 					sum = sum + (gajet[i].price * quantity);
 					inOut << "Name : " << gajet[i].gadgetName << endl;
 					inOut << "Battery Capacities : " << gajet[i].desc1 << endl;
@@ -459,10 +465,10 @@ void adminLogin(int& count, string& adminUser) { //admin page (need to login fir
 	string adminPassword = "";
 
 	wrong:
-	cout << endl << ifstream("interface/adminLogin.txt").rdbuf();
-	cout << "\nADMIN USERNAME ---> ";
+	cout << endl << ifstream("interface/adminLogin.txt").rdbuf() << endl << endl << endl << endl << endl << endl << endl;
+	cout <<endl<< setw(57)<< "ADMIN USERNAME ---> ";
 	cin >> adminUser;
-	cout << "\nADMIN PASSWORD ---> ";
+	cout << endl << setw(57) << "ADMIN PASSWORD ---> ";
 	while (ch = _getch()) { //assign ASCII value to ch
 		if (ch == 13) {  //13 is ENTER key in ASCII
 			if ((adminPassword == "abc123" && adminUser == "Tasha") || (adminPassword == "qwerty123" && adminUser == "Syarep") || (adminPassword == "Dida123" && adminUser == "Dida")) { //correct password
@@ -519,7 +525,7 @@ void displayAdminPage(double sumAllBuyer, string adminUser, gadget gajet[], ifst
 	cout << endl << ifstream("interface/adminLogin.txt").rdbuf() << endl;
 	cout << "         ----------------------------> Welcome Admin " << adminUser << " <---------------------------------" << endl << endl;
 
-displayAdmin:
+	displayAdmin:
 	cout << endl << ifstream("interface/displayAdmin.txt").rdbuf();
 	cin >> adminSelect;
 	if ((adminSelect != 1) && (adminSelect != 2) && (adminSelect != 3)) {
@@ -592,7 +598,18 @@ displayAdmin:
 		}
 	}
 	else if (adminSelect == 2) {
-		cout << "\nTOTAL SALES " << totalSales << endl;
+
+		int totalSold = 0;
+		cout << setw(82) << "=================================================================" << endl;
+		cout << setw(82) << "| Gadget Code |         Gadget Name           | No. Of Item Sold|" << endl;
+		cout << setw(82) << "=================================================================" << endl;
+		for (int i = 0; i < 10; i++) {
+			cout << setw(18) << "|" << setw(12) << gajet[i].gadgetCode << " |" << setw(30) << gajet[i].gadgetName << " |" << setw(16) << gajet[i].stockSold << " |" << endl;
+			totalSold = totalSold + gajet[i].stockSold;
+		}
+		cout << setw(82) << "=================================================================" << endl;
+		cout << setw(64) << "|  TOTAL NO OF ITEMS SOLD :                   |" << setw(16) << totalSold << " |" << endl;
+		cout << setw(82) << "=================================================================" << endl << endl;
 	}else if (adminSelect == 3) { // Display total profit
 		cout << "\nTOTAL PROFIT : RM" << sumAllBuyer << setprecision(2) << fixed << endl;
 	}
