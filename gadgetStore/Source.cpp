@@ -5,6 +5,7 @@
 #include <conio.h>
 #include <iomanip>
 #include <windows.h>
+#include <cstdlib> //for random coupon
 #include <cstdio> // utk pakai rename function to rename 
 #include <limits> //semata nak buat error
 #undef max //semata nak buat error
@@ -22,7 +23,7 @@ struct gadget { //syariff
 	int stock = 0;
 	double price = 0;
 	string gadgetCode;
-	int stockSold = 0;
+	int stockSold = 0; // berapa banyak barang yang dah dibeli
 };
 
 //function prototype
@@ -42,13 +43,13 @@ int main() {
 	HWND console = GetConsoleWindow();
 	RECT r;
 	GetWindowRect(console, &r); //stores the console's current dimensions
-	MoveWindow(console, r.left, r.top, 870, 600, TRUE); // 950 width, 600 height
+	MoveWindow(console, r.left, r.top, 870, 800, TRUE); // 870 width, 600 height
 	//end of fixed console size
 
 	//Receipt display text file
 	ofstream inOut("receiptTemp.txt", ios::trunc); //masukkan data dalam file semata2 nak display gadget in receipt
 	ifstream readDisplay("receiptTemp.txt"); //read input to display gadget yg dibeli at receipt
-	//Read gadget text file
+	//List of gadget & description  text file
 	ifstream gadgetList("gadget.txt"); //read gadget items
 	ofstream tempGadget("tempGadget.txt"); //store gadget items then the file is renamed into main file
 	//Admin text file
@@ -106,7 +107,7 @@ int main() {
 			selection = gadgetTypeSelection();
 			code = buyersMenu(selection, gajet);
 			kiraDuit(code, gajet, sum, hehe, inOut, totalSales);
-			if (hehe == 5) { // bila input salah
+			if (hehe == 5) { // bila input code barang unavailable stock
 				system("pause");
 				system("cls");
 				goto back;
@@ -229,6 +230,15 @@ string homeDisplay() { // homepage //dida & natasha
 string gadgetTypeSelection() { // dida 
 
 	string selection;
+
+	srand(time(0));
+	int v1 = (rand() % 5);
+	if ((v1 == 3) || (v1 == 5)) {
+		cout << "=======================================================================================================" << endl;
+		cout << "                               USE COUPON CODE : CODE06 FOR 6% DISCOUNT!                               " << endl;
+		cout << "=======================================================================================================" << endl;
+	}
+
 	do {
 		cout << endl << ifstream("interface/gadgetTypeSelection.txt").rdbuf();
 		cin >> selection;
@@ -241,12 +251,23 @@ string gadgetTypeSelection() { // dida
 string buyersMenu(string selection, gadget gajet[]) {
 
 	string c;
-	
+
+	srand(time(0));
+	int v1 = (rand() % 5);
+	if ((v1 == 3) || (v1 == 5)) {
+		cout << "=======================================================================================================" << endl;
+		cout << "                               USE COUPON CODE : CODE06 FOR 6% DISCOUNT!                               " << endl;
+		cout << "=======================================================================================================" << endl;
+	}
+	cout << endl << ifstream("interface/buyersMenu.txt").rdbuf() << endl << endl;
 	if (selection == "1") { //syariff
-		cout << endl << ifstream("interface/buyersMenu.txt").rdbuf();
-		cout << "                        -PENDRIVE-                    " << endl << endl;
+		//cout << endl << ifstream("interface/buyersMenu.txt").rdbuf() << endl << endl;
+		cout << "-------------------" << endl;
+		cout << "TYPE --> PENDRIVE /" << endl;
+		cout << "------------------" << endl;
 		for (int i = 0; i < 10; i++) {
 			if (gajet[i].type == "P") {
+				cout << "============================================================" << endl;
 				cout << "Name : " << gajet[i].gadgetName << endl;
 				cout <<"Capacities : " << gajet[i].desc1 << endl;
 				cout <<"Speed : " << gajet[i].desc2 << endl;
@@ -258,15 +279,19 @@ string buyersMenu(string selection, gadget gajet[]) {
 					cout << "Stock : " << gajet[i].stock << endl;
 				}
 				cout << "Price : " << setprecision(2) << fixed << gajet[i].price << endl;
-				cout << "Code : " << gajet[i].gadgetCode << endl << endl;
+				cout << "Code : " << gajet[i].gadgetCode << endl;
+				cout << "============================================================" << endl << endl;
 			}
 		}
 	}
 	else if (selection == "2") { //natasha
-		cout << endl << ifstream("interface/buyersMenu.txt").rdbuf();
-		cout << "                        -MOUSE-                    " << endl << endl;
+		//cout << endl << ifstream("interface/buyersMenu.txt").rdbuf() << endl << endl;
+		cout << "----------------" << endl;
+		cout << "TYPE --> MOUSE /" << endl;
+		cout << "---------------" << endl;
 		for (int i = 0; i < 10; i++) {
 			if (gajet[i].type == "M") {
+				cout << "============================================================" << endl;
 				cout << "Name : " << gajet[i].gadgetName << endl;
 				cout << "Sensing Type : " << gajet[i].desc1 << endl;
 				cout << "Existence of wire  : " << gajet[i].desc2 << endl;
@@ -278,15 +303,19 @@ string buyersMenu(string selection, gadget gajet[]) {
 					cout << "Stock : " << gajet[i].stock << endl;
 				}
 				cout << "Price : " << setprecision(2) << fixed << gajet[i].price << endl;
-				cout << "Code : " << gajet[i].gadgetCode << endl << endl;
+				cout << "Code : " << gajet[i].gadgetCode << endl;
+				cout << "============================================================" << endl << endl;
 			}
 		}
 	}
 	else if (selection == "3") { //natasha
-		cout << endl << ifstream("interface/buyersMenu.txt").rdbuf();
-		cout << "                        -HEADPHONES-                    " << endl << endl;
+		//cout << endl << ifstream("interface/buyersMenu.txt").rdbuf() << endl << endl;
+		cout << "---------------------" << endl;
+		cout << "TYPE --> HEADPHONES /" << endl;
+		cout << "--------------------" << endl;
 		for (int i = 0; i < 10; i++) {
 			if (gajet[i].type == "H") {
+				cout << "============================================================" << endl;
 				cout << "Name : " << gajet[i].gadgetName << endl;
 				cout << "Existence of wires : " << gajet[i].desc1 << endl;
 				cout << "Dimension : " << gajet[i].desc2 << endl;
@@ -297,15 +326,19 @@ string buyersMenu(string selection, gadget gajet[]) {
 					cout << "Stock : " << gajet[i].stock << endl;
 				}
 				cout << "Price : " << setprecision(2) << fixed << gajet[i].price << endl;
-				cout << "Code : " << gajet[i].gadgetCode << endl << endl;
+				cout << "Code : " << gajet[i].gadgetCode << endl;
+				cout << "============================================================" << endl << endl;
 			}
 		}
 	}
 	else if (selection == "4") { //natasha
-		cout << endl << ifstream("interface/buyersMenu.txt").rdbuf();
-		cout << "                        -POWER BANK-                    " << endl << endl;
+		//cout << endl << ifstream("interface/buyersMenu.txt").rdbuf() << endl << endl;
+		cout << "---------------------" << endl;
+		cout << "TYPE --> POWER BANK /" << endl;
+		cout << "--------------------" << endl;
 		for (int i = 0; i < 10; i++) {
 			if (gajet[i].type == "B") {
+				cout << "============================================================" << endl;
 				cout << "Name : " << gajet[i].gadgetName << endl;
 				cout << "Battery Capacities : " << gajet[i].desc1 << endl;
 				cout << "Amount of Ports : " << gajet[i].desc2 << endl;
@@ -318,17 +351,23 @@ string buyersMenu(string selection, gadget gajet[]) {
 					cout << "Stock : " << gajet[i].stock << endl;
 				}
 				cout << "Price : " << setprecision(2) << fixed << gajet[i].price << endl;
-				cout << "Code : " << gajet[i].gadgetCode << endl << endl;
+				cout << "Code : " << gajet[i].gadgetCode << endl;
+				cout << "============================================================" << endl << endl;
 			}
 		}
 	}
-
-	cout << "ENTER PRODUCT CODE FOR ITEMS YOU WANT TO BUY (MAKE SURE THE CODES IN CAPITAL LETTER)" << endl; //syariff
-	cout << endl << " ----->   ";
 	cin.ignore();
-	getline(cin, c);
+	do {
+		cout << "ENTER PRODUCT CODE FOR ITEMS YOU WANT TO BUY (MAKE SURE THE CODES IN CAPITAL LETTER)" << endl; //syariff
+		cout << endl << " ----->   ";
+		getline(cin, c); 
+		if ((c != "P01") && (c != "P02") && (c != "M01") && (c != "M02") && (c != "M03") && (c != "H01") && (c != "H02") && (c != "H03") && (c != "B01") && (c != "B02")) {
+			cout << "Please enter correct product code!!" << endl << endl;
+		}
+	} while ((c != "P01") && (c != "P02") && (c != "M01") && (c != "M02") && (c != "M03") && (c != "H01") && (c != "H02") && (c != "H03") && (c != "B01") && (c != "B02"));
 	
 	return c;
+	
 }
 
 void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& inOut, int& totalSales) { //syariff
@@ -340,10 +379,13 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 		if (gajet[i].type == "P") { //PENDRIVE
 			if (code == gajet[i].gadgetCode) {
 				if (gajet[i].stock == 0) {
-					cout << "THE ITEM FOR CODE " << code << " (" << gajet[i].gadgetName << ") IS UNAVAILABLE" << endl;
+					cout << "\nTHE ITEM FOR CODE " << code << " (" << gajet[i].gadgetName << ") IS UNAVAILABLE" << endl;
+					cout << "THE GADGET WILL GO BACK TO TYPE OF GADGET SELECTION" << endl;
+					hehe = 5;
+					return;
 				}
 				else {
-					cout << "PLEASE ENTER QUANTITY :"<<endl;
+					cout << "PLEASE ENTER QUANTITY "<<endl;
 					cout << endl << " ----->   ";
 					cin >> quantity;
 					if ((gajet[i].stock - quantity) < 0) {
@@ -359,21 +401,25 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 					gajet[i].stock = gajet[i].stock - quantity;
 					gajet[i].stockSold = gajet[i].stockSold + quantity;
 					sum = sum + (gajet[i].price * quantity);
-					inOut << "Name : " << gajet[i].gadgetName << endl;  //WRITE INTO FILE
+					/*inOut << "Name : " << gajet[i].gadgetName << endl;  //WRITE INTO FILE
 					inOut << "Capacities : " << gajet[i].desc1 << endl;
 					inOut << "Speed : " << gajet[i].desc2 << endl;
 					inOut << "Dimensions : " << gajet[i].desc3 << endl;
-					inOut << "Quantity bought : " << quantity << endl << endl;
+					inOut << "Quantity bought : " << quantity << endl << endl;*/
+					inOut << setw(23) << "|" << setw(30) << gajet[i].gadgetName << " |" << setw(12) << setprecision(2) << fixed << gajet[i].price << " |" << setw(9) << quantity << " |" << endl;
 				}
 			}
 		}
 		else if (gajet[i].type == "M") { //MOUSE
 			if (code == gajet[i].gadgetCode) {
 				if (gajet[i].stock == 0) {
-					cout << "THE ITEM FOR CODE " << code << " (" << gajet[i].gadgetName << ") IS UNAVAILABLE" << endl;
+					cout << "\nTHE ITEM FOR CODE " << code << " (" << gajet[i].gadgetName << ") IS UNAVAILABLE" << endl;
+					cout << "THE GADGET WILL GO BACK TO TYPE OF GADGET SELECTION" << endl;
+					hehe = 5;
+					return;
 				}
 				else {
-					cout << "PLEASE ENTER QUANTITY :" << endl;
+					cout << "PLEASE ENTER QUANTITY " << endl;
 					cin >> quantity;
 					if ((gajet[i].stock - quantity) < 0) {
 						cout << "Please re-enter quantity because stock is not enough!" << endl;
@@ -388,21 +434,25 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 					gajet[i].stock = gajet[i].stock - quantity;
 					gajet[i].stockSold = gajet[i].stockSold + quantity;
 					sum = sum + (gajet[i].price * quantity);
-					inOut << "Name : " << gajet[i].gadgetName << endl;
+					/*inOut << "Name : " << gajet[i].gadgetName << endl;
 					inOut << "Sensing Type : " << gajet[i].desc1 << endl;
 					inOut << "Existence of wire  : " << gajet[i].desc2 << endl;
 					inOut << "Dimensions : " << gajet[i].desc3 << endl;
-					inOut << "Quantity bought : " << quantity << endl << endl;
+					inOut << "Quantity bought : " << quantity << endl << endl;*/
+					inOut << setw(23) << "|" << setw(30) << gajet[i].gadgetName << " |" << setw(12) << setprecision(2) << fixed << gajet[i].price << " |" << setw(9) << quantity << " |" << endl;
 				}
 			}
 		}
 		else if (gajet[i].type == "H") { //HEADPHONES
 			if (code == gajet[i].gadgetCode) {
 				if (gajet[i].stock == 0) {
-					cout << "THE ITEM FOR CODE " << code << " (" << gajet[i].gadgetName << ") IS UNAVAILABLE" << endl;
+					cout << "\nTHE ITEM FOR CODE " << code << " (" << gajet[i].gadgetName << ") IS UNAVAILABLE" << endl;
+					cout << "THE GADGET WILL GO BACK TO TYPE OF GADGET SELECTION" << endl;
+					hehe = 5;
+					return;
 				}
 				else {
-					cout << "PLEASE ENTER QUANTITY :" << endl;
+					cout << "PLEASE ENTER QUANTITY " << endl;
 					cin >> quantity;
 					if ((gajet[i].stock - quantity) < 0) {
 						cout << "Please re-enter quantity because stock is not enough!" << endl;
@@ -417,20 +467,24 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 					gajet[i].stock = gajet[i].stock - quantity;
 					gajet[i].stockSold = gajet[i].stockSold + quantity;
 					sum = sum + (gajet[i].price * quantity);
-					inOut << "Name : " << gajet[i].gadgetName << endl;
+					/*inOut << "Name : " << gajet[i].gadgetName << endl;
 					inOut << "Existence of wires : " << gajet[i].desc1 << endl;
 					inOut << "Dimension : " << gajet[i].desc2 << endl;
-					inOut << "Quantity bought : " << quantity << endl << endl;
+					inOut << "Quantity bought : " << quantity << endl << endl;*/
+					inOut << setw(23) << "|" << setw(30) << gajet[i].gadgetName << " |" << setw(12) << setprecision(2) << fixed << gajet[i].price << " |" << setw(9) << quantity << " |" << endl;
 				}
 			}
 		}
 		else if (gajet[i].type == "B") { //POWERBANK
 			if (code == gajet[i].gadgetCode) {
 				if (gajet[i].stock == 0) {
-					cout << "THE ITEM FOR CODE " << code << " (" << gajet[i].gadgetName << ") IS UNAVAILABLE" << endl;
+					cout << "\nTHE ITEM FOR CODE " << code << " (" << gajet[i].gadgetName << ") IS UNAVAILABLE" << endl;
+					cout << "THE GADGET WILL GO BACK TO TYPE OF GADGET SELECTION" << endl;
+					hehe = 5;
+					return;
 				}
 				else {
-					cout << "PLEASE ENTER QUANTITY :" << endl;
+					cout << "PLEASE ENTER QUANTITY " << endl;
 					cin >> quantity;
 					if ((gajet[i].stock - quantity) < 0) {
 						cout << "Please re-enter quantity because stock is not enough!" << endl;
@@ -445,12 +499,13 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 					gajet[i].stock = gajet[i].stock - quantity;
 					gajet[i].stockSold = gajet[i].stockSold + quantity;
 					sum = sum + (gajet[i].price * quantity);
-					inOut << "Name : " << gajet[i].gadgetName << endl;
+					/*inOut << "Name : " << gajet[i].gadgetName << endl;
 					inOut << "Battery Capacities : " << gajet[i].desc1 << endl;
 					inOut << "Amount of Ports : " << gajet[i].desc2 << endl;
 					inOut << "Dimensions : " << gajet[i].desc3 << endl;
 					inOut << "Weight : " << gajet[i].desc4 << endl;
-					inOut << "Quantity bought : " << quantity << endl << endl;
+					inOut << "Quantity bought : " << quantity << endl << endl;*/
+					inOut << setw(23) << "|" << setw(30) << gajet[i].gadgetName << " |" << setw(12) << setprecision(2) << fixed << gajet[i].price << " |" << setw(9) << quantity << " |" << endl;
 				}
 			}
 		}
@@ -617,12 +672,19 @@ void receipt(double sum, ifstream& readDisplay, int customer) { //receipt
 
 	string line;
 
+	cout << endl << ifstream("interface/receipt.txt").rdbuf();
+
 	cout << "\n===== RECEIPT =====" << endl;
 	cout << "CUSTOMER NO :" << customer << endl << endl;
+	cout << setw(80) << "==========================================================" << endl;
+	cout << setw(80) << "|         Gadget Name           |  Price(RM)  | Quantity |" << endl;
+	cout << setw(80) << "==========================================================" << endl;
 	//Loop from receiptTemp.txt
 	while (getline(readDisplay, line)) {
 		// Output the text from the file
 		cout << line << endl;
 	}
-	cout << "\nTotal harga kena bayar : RM" << setprecision(2) << fixed << sum << endl;
+	cout << setw(80) << "==========================================================" << endl;
+	cout << "\nSubtotal : RM" << setprecision(2) << fixed << sum << endl;
+	cout << "\nTotal price : RM" << setprecision(2) << fixed << sum << endl;
 }
