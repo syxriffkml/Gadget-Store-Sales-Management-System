@@ -31,30 +31,20 @@ string homeDisplay();
 string gadgetTypeSelection();
 string buyersMenu(string, gadget[]);
 void kiraDuit(string&, gadget[], double&, int&, ofstream&,int&);
+void discountFunc(double&, string&, double&, int&);
 void adminLogin(int&, string&);
 void displayAdminPage(double,string, gadget[], ifstream&, int&);
-void discountFunc(double& sum,string& coupon,double& diskaun,int& haveDiscount) {
-
-	if (coupon == "CODE06") {
-		diskaun = sum * 0.06;
-		sum = sum - diskaun;
-		haveDiscount = 1;
-	}
-	else {
-		haveDiscount = 0;
-	}
-}
-void receipt(double, ifstream&, int, double&, int& );
+void receipt(double, ifstream&, double&, int& );
 void writeIntoTemp(ofstream&, ifstream&, gadget[], ofstream&, ifstream&, ofstream&, ifstream&, double&,int&);
 
 
 int main() {
 
-	//fixed console size   //syariff
+	//fixed console size   
 	HWND console = GetConsoleWindow();
 	RECT r;
 	GetWindowRect(console, &r); //stores the console's current dimensions
-	MoveWindow(console, r.left, r.top, 870, 800, TRUE); // 870 width, 600 height
+	MoveWindow(console, r.left, r.top, 870, 800, TRUE); // 870 width, 800 height
 	//end of fixed console size
 
 	//Receipt display text file
@@ -108,7 +98,6 @@ int main() {
 		totalSales = stoi(myString);
 	}
 
-	int customer = 1;
 	do { // syariff
 		home:
 		status = homeDisplay();
@@ -122,40 +111,46 @@ int main() {
 				system("pause");
 				system("cls");
 				goto back;
-			}
-			cout << "\nDo you want to buy another gadget? Click 1 if yes || Click 2 if no" << endl; //syariff
+			}  
+			cout << "\nDO YOU WANT TO BUY ANOTHER GADGET? (1-YES) || (2-NO)" << endl; //syariff
 			cout << endl << " ----->   ";
 			cin >> hehe;
 			if (hehe == 1) { //bila input 1/yes
 				system("cls");
 				goto back;
 			}
-			/*else {
+			else {
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 				system("cls");
-			}*/
+			}
 			// FUNCTION FOR DISCOUNT : MEMBERSHIP/ COUPON CODE WHATEVER LAH HAHAHA
-			cout << "\nDo you have coupon code  (Y-yes) || (N-no)----->   "; 
+			cout << endl << ifstream("interface/couponPage.txt").rdbuf();
+			cout << endl <<endl<<endl<< setw(75) << "DO YOU HAVE COUPON CODE (1-YES) || (2-NO) ----->   ";
 			cin >> haveCoupon;
 			if (haveCoupon == "1") {
 				int counter = 0;
 				do {
-					cout << "\nEnter coupon code  ----->   ";
+					cout << endl << setw(72) << "ENTER COUPON CODE (CASE SENSITIVE)  ----->   ";
 					cin >> coupon;
 					counter++;
 					if (counter == 3) {
-						cout << "\nYou have entered wrong coupon code for 3 times," << endl;
-						cout <<"the program will continue your purchase without discount" << endl;
+						cout << endl <<endl<< setw(76) << "YOU HAVE ENTERED WRONG COUPON CODE FOR 3 TIMES,"<< endl;
+						cout << endl << setw(81) << "THE PROGRAM WILL CONTINUE YOU PURCHASES WITHOUT DISCOUNT" << endl << endl << endl << endl;
 						break;
 					}
 				} while (coupon != "CODE06");
+				cout << endl << endl;
 				system("pause");
 				system("cls");
 			}
 			else {
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 				system("cls");
 			}
 			discountFunc(sum, coupon, diskaun, haveDiscount);
-			receipt(sum, readDisplay, customer,diskaun, haveDiscount);
+			receipt(sum, readDisplay,diskaun, haveDiscount);
 			system("pause");
 			system("cls");
 		}
@@ -167,10 +162,19 @@ int main() {
 			}
 			do {
 				displayAdminPage(sumAllBuyer,adminUser, gajet,Admin,totalSales);  //will put function for admin(check stocks/check total profit)
-				cout << "Do you want to go back to admin page again? (PRESS 1 - YES | PRESS 2 - NO) :";
+				cout << endl << setw(60) << "BACK TO SELECTION AGAIN?  (1-YES) || (2-NO)" << endl;
+				cout << setw(30) <<" --------->   ";
 				cin >> adminRepeat;
-				system("pause");
-				system("cls");
+				if(adminRepeat == 1) { // bila salah input sampai 3 kali
+					system("pause");
+					system("cls");
+				}
+				else {
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					system("pause");
+					system("cls");
+				}
 			} while (adminRepeat == 1);
 		}
 		else if (status == "3") { // EXIT PROGRAM UWU
@@ -183,8 +187,7 @@ int main() {
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			}
 			Beep(1000, 500);
-			cout << "=========> ERROR <==========  " << endl;
-			cout << "PLEASE PRESS 1 FOR USER OR PRESS 2 FOR ADMIN" << endl;
+			cout << endl << ifstream("interface/homepageError.txt").rdbuf();
 			system("pause");
 			system("cls");
 		}
@@ -197,7 +200,6 @@ int main() {
 			// .clear() untuk buang customer lama punya receipt display
 			inOut.clear();
 			readDisplay.clear();
-			customer++;
 		}
 		system("cls");
 	} while ((homepage == 'Y') || (homepage == 'y'));     //after all the buyers dah beli barang, boleh tekan Y, gi hompage and tukar kepada admin
@@ -293,7 +295,6 @@ string buyersMenu(string selection, gadget gajet[]) {
 	}
 	cout << endl << ifstream("interface/buyersMenu.txt").rdbuf() << endl << endl;
 	if (selection == "1") { //syariff
-		//cout << endl << ifstream("interface/buyersMenu.txt").rdbuf() << endl << endl;
 		cout << "-------------------" << endl;
 		cout << "TYPE --> PENDRIVE /" << endl;
 		cout << "------------------" << endl;
@@ -317,7 +318,6 @@ string buyersMenu(string selection, gadget gajet[]) {
 		}
 	}
 	else if (selection == "2") { //natasha
-		//cout << endl << ifstream("interface/buyersMenu.txt").rdbuf() << endl << endl;
 		cout << "----------------" << endl;
 		cout << "TYPE --> MOUSE /" << endl;
 		cout << "---------------" << endl;
@@ -341,7 +341,6 @@ string buyersMenu(string selection, gadget gajet[]) {
 		}
 	}
 	else if (selection == "3") { //natasha
-		//cout << endl << ifstream("interface/buyersMenu.txt").rdbuf() << endl << endl;
 		cout << "---------------------" << endl;
 		cout << "TYPE --> HEADPHONES /" << endl;
 		cout << "--------------------" << endl;
@@ -364,7 +363,6 @@ string buyersMenu(string selection, gadget gajet[]) {
 		}
 	}
 	else if (selection == "4") { //natasha
-		//cout << endl << ifstream("interface/buyersMenu.txt").rdbuf() << endl << endl;
 		cout << "---------------------" << endl;
 		cout << "TYPE --> POWER BANK /" << endl;
 		cout << "--------------------" << endl;
@@ -417,7 +415,7 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 					return;
 				}
 				else {
-					cout << "PLEASE ENTER QUANTITY  ----->   ";
+					cout << "\nPLEASE ENTER QUANTITY  ----->   ";
 					cin >> quantity;
 					if ((gajet[i].stock - quantity) < 0) {
 						cout << "Please re-enter quantity because stock is not enough!" << endl << endl;
@@ -446,7 +444,7 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 					return;
 				}
 				else {
-					cout << "PLEASE ENTER QUANTITY  ----->   ";
+					cout << "\nPLEASE ENTER QUANTITY  ----->   ";
 					cin >> quantity;
 					if ((gajet[i].stock - quantity) < 0) {
 						cout << "Please re-enter quantity because stock is not enough!" << endl << endl;
@@ -475,7 +473,7 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 					return;
 				}
 				else {
-					cout << "PLEASE ENTER QUANTITY  ----->   ";
+					cout << "\nPLEASE ENTER QUANTITY  ----->   ";
 					cin >> quantity;
 					if ((gajet[i].stock - quantity) < 0) {
 						cout << "Please re-enter quantity because stock is not enough!" << endl << endl;
@@ -504,7 +502,7 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 					return;
 				}
 				else {
-					cout << "PLEASE ENTER QUANTITY  ----->   ";
+					cout << "\nPLEASE ENTER QUANTITY  ----->   ";
 					cin >> quantity;
 					if ((gajet[i].stock - quantity) < 0) {
 						cout << "Please re-enter quantity because stock is not enough!" << endl << endl;
@@ -597,7 +595,9 @@ void displayAdminPage(double sumAllBuyer, string adminUser, gadget gajet[], ifst
 	cout << endl << ifstream("interface/displayAdminSelection.txt").rdbuf();
 	cin >> adminSelect;
 	if ((adminSelect != 1) && (adminSelect != 2) && (adminSelect != 3)) {
-		cout << setw(68) << "Please enter correct number selection!!" << endl;  //70
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << endl << setw(68) << "Please enter correct number selection!!" << endl;  //70
 		goto displayAdmin;
 	}
 
@@ -606,7 +606,9 @@ void displayAdminPage(double sumAllBuyer, string adminUser, gadget gajet[], ifst
 		cout << endl << ifstream("interface/displayAdminStock.txt").rdbuf();
 		cin >> selectStock;
 		if ((selectStock != 1) && (selectStock != 2) && (selectStock != 3) && (selectStock != 4) && (selectStock != 5)) {
-			cout << "Please enter correct number selection!!" << endl;
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << endl << setw(67) << "Please enter correct number selection!!" << endl;
 			goto stockAdmin;
 		}
 		//display all stocks data
@@ -641,27 +643,38 @@ void displayAdminPage(double sumAllBuyer, string adminUser, gadget gajet[], ifst
 		cout << setw(82) << "=================================================================" << endl << endl;
 		//end of display all stocks data
 
-		cout << setw(85) << "Do you want to add gadget item stocks (PRESS 1 - YES | PRESS 2 - NO)" << endl;
+		cout << setw(72) << "DO YOU WANT TO ADD GADGET ITEM STOCKS (1-YES) || (2-NO)" << endl;
 		cout << setw(27) << "--------->";
 		cin >> selectAddStock;
 
 		if (selectAddStock == 1) {
 			//Add stocks
+			tambahStock:
 			cout << endl << setw(66) << "TYPE GADGET CODE FOR ITEM YOU WANT TO ADD STOCKS " << endl;
 			cout << setw(27) << "--------->";
 			cin >> code;
-			for (int i = 0; i < 10; i++) {  //Kalau letak code salah, dia x keluar
-				if (code == gajet[i].gadgetCode) {
-					cout << endl << setw(63) << "Enter number of stocks to be added ---------> ";
-					cin >> addStocks;
-					gajet[i].stock = gajet[i].stock + addStocks;
-					cout << endl << setw(46) << "STOCKS ADDED FOR GADGET CODE " << gajet[i].gadgetCode;
-					cout << endl << setw(52) << "NEW NUMBER OF STOCKS FOR ITEM CODE " << gajet[i].gadgetCode << " IS " << gajet[i].stock << endl;
+			if ((code == "P01") || (code == "P02") || (code == "M01") || (code == "M02") || (code == "M03") || (code == "H01") || (code == "H02") || (code == "H03") || (code == "B01") || (code == "B02")) {
+				for (int i = 0; i < 10; i++) {  //Kalau letak code salah, dia x keluar
+					if (code == gajet[i].gadgetCode) {
+						cout << endl << setw(63) << "Enter number of stocks to be added ---------> ";
+						cin >> addStocks;
+						gajet[i].stock = gajet[i].stock + addStocks;
+						cout << endl << setw(46) << "STOCKS ADDED FOR GADGET CODE (" << gajet[i].gadgetCode << ") " << gajet[i].gadgetName;
+						cout << endl << setw(52) << "NEW NUMBER OF STOCKS FOR ITEM CODE " << gajet[i].gadgetCode << " IS " << gajet[i].stock << endl;
+					}
 				}
+			}
+			else {
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << endl << setw(52) << "PLEASE ENTER CORRECT GADGET CODE !!" << endl;
+				goto tambahStock;
 			}
 			//End of add stocks
 		}
-		else if (selectAddStock == 2) { //Display sales
+		else{ //Display sales
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			return;
 		}
 	}
@@ -683,30 +696,41 @@ void displayAdminPage(double sumAllBuyer, string adminUser, gadget gajet[], ifst
 	}
 }
 
-void receipt(double sum, ifstream& readDisplay, int customer, double& diskaun, int& haveDiscount) { //receipt
+void discountFunc(double& sum, string& coupon, double& diskaun, int& haveDiscount) {
+
+	if (coupon == "CODE06") {
+		diskaun = sum * 0.06;
+		sum = sum - diskaun;
+		haveDiscount = 1;
+	}
+	else {
+		haveDiscount = 0;
+	}
+}
+
+void receipt(double sum, ifstream& readDisplay, double& diskaun, int& haveDiscount) { //receipt
 
 	string line;
 
-	cout << endl << ifstream("interface/receipt.txt").rdbuf();
+	cout << endl << ifstream("interface/receipt.txt").rdbuf()<<endl << endl << endl;
 
-	cout << "\n===== RECEIPT =====" << endl;
-	cout << "CUSTOMER NO :" << customer << endl << endl;
+	cout << setw(80) << "                        RECEIPT                         " << endl;
 	cout << setw(80) << "==========================================================" << endl;
 	cout << setw(80) << "|         Gadget Name           |  Price(RM)  | Quantity |" << endl;
 	cout << setw(80) << "==========================================================" << endl;
+	cout << setw(80) << "|                               |             |          |" << endl;
 	//Loop from receiptTemp.txt
 	while (getline(readDisplay, line)) {
 		// Output the text from the file
 		cout << line << endl;
 	}
+	cout << setw(80) << "|                               |             |          |" << endl;
 	cout << setw(80) << "==========================================================" << endl;
-	if (haveDiscount == 1) {
-		cout << "\nSubtotal : RM " << setprecision(2) << fixed << sum + diskaun << endl;
-		cout << "Discount : RM " << setprecision(2) << fixed << diskaun << endl;
-		cout << "Total price : RM " << setprecision(2) << fixed << sum << endl;
-	}
-	else if (haveDiscount == 0) {
-		cout << "\nSubtotal : RM " << setprecision(2) << fixed << sum << endl;
-		cout << "Total price : RM " << setprecision(2) << fixed << sum << endl;
-	}
+	cout << setw(80) << "|                                                        |" << endl;
+	cout << setw(23) << "|" << "  Subtotal"    << setw(33) << "RM" << setw(10) << setprecision(2) << fixed << sum + diskaun << setw(4) << " |" << endl;
+	cout << setw(23) << "|" << "  Discount"    << setw(33) << "RM" << setw(10) << setprecision(2) << fixed << diskaun       << setw(4) << " |" << endl;
+	cout << setw(23) << "|" << setw(55) << "------------"  << " |" << endl;
+	cout << setw(23) << "|" << "  Total price" << setw(30) << "RM" << setw(10) << setprecision(2) << fixed << sum           << setw(4) << " |" << endl;
+	cout << setw(80) << "|                                                        |" << endl;
+	cout << setw(80) << "==========================================================" << endl << endl << endl;
 }
