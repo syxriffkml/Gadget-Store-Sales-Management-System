@@ -33,7 +33,18 @@ string buyersMenu(string, gadget[]);
 void kiraDuit(string&, gadget[], double&, int&, ofstream&,int&);
 void adminLogin(int&, string&);
 void displayAdminPage(double,string, gadget[], ifstream&, int&);
-void receipt(double, ifstream&, int);
+void discountFunc(double& sum,string& coupon,double& diskaun,int& haveDiscount) {
+
+	if (coupon == "CODE06") {
+		diskaun = sum * 0.06;
+		sum = sum - diskaun;
+		haveDiscount = 1;
+	}
+	else {
+		haveDiscount = 0;
+	}
+}
+void receipt(double, ifstream&, int, double&, int& );
 void writeIntoTemp(ofstream&, ifstream&, gadget[], ofstream&, ifstream&, ofstream&, ifstream&, double&,int&);
 
 
@@ -56,10 +67,10 @@ int main() {
 	ifstream Admin("admin.txt"); //read admin
 	ofstream TempAdmin("tempAdmin.txt"); //add total price into admin
 
-	int count = 0,adminRepeat, totalSales=0;
+	int count = 0, adminRepeat, totalSales = 0,haveDiscount=0;
 	char homepage;
-	double sum = 0.00, sumAllBuyer=0; //sum tu total harga buyer beli, sumAllBuyer tu total semua pembelian with receipt berlainan
-	string status,selection,code,adminUser;
+	double sum = 0.00, sumAllBuyer=0.00, diskaun = 0.00; //sum tu total harga buyer beli, sumAllBuyer tu total semua pembelian with receipt berlainan
+	string status,selection,code,haveCoupon,coupon,adminUser;
 
 	gadget gajet[10]; // 10 gadgets
 
@@ -119,17 +130,38 @@ int main() {
 				system("cls");
 				goto back;
 			}
+			/*else {
+				system("cls");
+			}*/
+			// FUNCTION FOR DISCOUNT : MEMBERSHIP/ COUPON CODE WHATEVER LAH HAHAHA
+			cout << "\nDo you have coupon code  (Y-yes) || (N-no)----->   "; 
+			cin >> haveCoupon;
+			if (haveCoupon == "1") {
+				int counter = 0;
+				do {
+					cout << "\nEnter coupon code  ----->   ";
+					cin >> coupon;
+					counter++;
+					if (counter == 3) {
+						cout << "\nYou have entered wrong coupon code for 3 times," << endl;
+						cout <<"the program will continue your purchase without discount" << endl;
+						break;
+					}
+				} while (coupon != "CODE06");
+				system("pause");
+				system("cls");
+			}
 			else {
 				system("cls");
 			}
-			// FUNCTION FOR DISCOUNT : MEMBERSHIP/ COUPON CODE WHATEVER LAH HAHAHA
-			receipt(sum, readDisplay, customer);
+			discountFunc(sum, coupon, diskaun, haveDiscount);
+			receipt(sum, readDisplay, customer,diskaun, haveDiscount);
 			system("pause");
 			system("cls");
 		}
 		else if (status == "2") { // ADMIN PAGE
 			adminLogin(count,adminUser);
-			if (count == 3) {
+			if (count == 3) { // bila salah input sampai 3 kali
 				count = 0;
 				goto home;
 			}
@@ -385,15 +417,14 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 					return;
 				}
 				else {
-					cout << "PLEASE ENTER QUANTITY "<<endl;
-					cout << endl << " ----->   ";
+					cout << "PLEASE ENTER QUANTITY  ----->   ";
 					cin >> quantity;
 					if ((gajet[i].stock - quantity) < 0) {
-						cout << "Please re-enter quantity because stock is not enough!" << endl;
+						cout << "Please re-enter quantity because stock is not enough!" << endl << endl;
 						goto startQuantity;
 					}
 					else if (cin.fail()) {
-						cout << "Please enter an actual number for quantity!" << endl;
+						cout << "Please enter an actual number for quantity!" << endl << endl;
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 						goto startQuantity;
@@ -401,11 +432,7 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 					gajet[i].stock = gajet[i].stock - quantity;
 					gajet[i].stockSold = gajet[i].stockSold + quantity;
 					sum = sum + (gajet[i].price * quantity);
-					/*inOut << "Name : " << gajet[i].gadgetName << endl;  //WRITE INTO FILE
-					inOut << "Capacities : " << gajet[i].desc1 << endl;
-					inOut << "Speed : " << gajet[i].desc2 << endl;
-					inOut << "Dimensions : " << gajet[i].desc3 << endl;
-					inOut << "Quantity bought : " << quantity << endl << endl;*/
+					
 					inOut << setw(23) << "|" << setw(30) << gajet[i].gadgetName << " |" << setw(12) << setprecision(2) << fixed << gajet[i].price << " |" << setw(9) << quantity << " |" << endl;
 				}
 			}
@@ -419,14 +446,14 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 					return;
 				}
 				else {
-					cout << "PLEASE ENTER QUANTITY " << endl;
+					cout << "PLEASE ENTER QUANTITY  ----->   ";
 					cin >> quantity;
 					if ((gajet[i].stock - quantity) < 0) {
-						cout << "Please re-enter quantity because stock is not enough!" << endl;
+						cout << "Please re-enter quantity because stock is not enough!" << endl << endl;
 						goto startQuantity;
 					}
 					else if (cin.fail()) {
-						cout << "Please enter an actual number for quantity!" << endl;
+						cout << "Please enter an actual number for quantity!" << endl << endl;
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 						goto startQuantity;
@@ -434,11 +461,7 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 					gajet[i].stock = gajet[i].stock - quantity;
 					gajet[i].stockSold = gajet[i].stockSold + quantity;
 					sum = sum + (gajet[i].price * quantity);
-					/*inOut << "Name : " << gajet[i].gadgetName << endl;
-					inOut << "Sensing Type : " << gajet[i].desc1 << endl;
-					inOut << "Existence of wire  : " << gajet[i].desc2 << endl;
-					inOut << "Dimensions : " << gajet[i].desc3 << endl;
-					inOut << "Quantity bought : " << quantity << endl << endl;*/
+					
 					inOut << setw(23) << "|" << setw(30) << gajet[i].gadgetName << " |" << setw(12) << setprecision(2) << fixed << gajet[i].price << " |" << setw(9) << quantity << " |" << endl;
 				}
 			}
@@ -452,14 +475,14 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 					return;
 				}
 				else {
-					cout << "PLEASE ENTER QUANTITY " << endl;
+					cout << "PLEASE ENTER QUANTITY  ----->   ";
 					cin >> quantity;
 					if ((gajet[i].stock - quantity) < 0) {
-						cout << "Please re-enter quantity because stock is not enough!" << endl;
+						cout << "Please re-enter quantity because stock is not enough!" << endl << endl;
 						goto startQuantity;
 					}
 					else if (cin.fail()) {
-						cout << "Please enter an actual number for quantity!" << endl;
+						cout << "Please enter an actual number for quantity!" << endl << endl;
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 						goto startQuantity;
@@ -467,10 +490,7 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 					gajet[i].stock = gajet[i].stock - quantity;
 					gajet[i].stockSold = gajet[i].stockSold + quantity;
 					sum = sum + (gajet[i].price * quantity);
-					/*inOut << "Name : " << gajet[i].gadgetName << endl;
-					inOut << "Existence of wires : " << gajet[i].desc1 << endl;
-					inOut << "Dimension : " << gajet[i].desc2 << endl;
-					inOut << "Quantity bought : " << quantity << endl << endl;*/
+					
 					inOut << setw(23) << "|" << setw(30) << gajet[i].gadgetName << " |" << setw(12) << setprecision(2) << fixed << gajet[i].price << " |" << setw(9) << quantity << " |" << endl;
 				}
 			}
@@ -484,14 +504,14 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 					return;
 				}
 				else {
-					cout << "PLEASE ENTER QUANTITY " << endl;
+					cout << "PLEASE ENTER QUANTITY  ----->   ";
 					cin >> quantity;
 					if ((gajet[i].stock - quantity) < 0) {
-						cout << "Please re-enter quantity because stock is not enough!" << endl;
+						cout << "Please re-enter quantity because stock is not enough!" << endl << endl;
 						goto startQuantity;
 					}
 					else if (cin.fail()) {
-						cout << "Please enter an actual number for quantity!" << endl;
+						cout << "Please enter an actual number for quantity!" << endl << endl;
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 						goto startQuantity;
@@ -499,12 +519,7 @@ void kiraDuit(string& code, gadget gajet[], double& sum, int& hehe, ofstream& in
 					gajet[i].stock = gajet[i].stock - quantity;
 					gajet[i].stockSold = gajet[i].stockSold + quantity;
 					sum = sum + (gajet[i].price * quantity);
-					/*inOut << "Name : " << gajet[i].gadgetName << endl;
-					inOut << "Battery Capacities : " << gajet[i].desc1 << endl;
-					inOut << "Amount of Ports : " << gajet[i].desc2 << endl;
-					inOut << "Dimensions : " << gajet[i].desc3 << endl;
-					inOut << "Weight : " << gajet[i].desc4 << endl;
-					inOut << "Quantity bought : " << quantity << endl << endl;*/
+					
 					inOut << setw(23) << "|" << setw(30) << gajet[i].gadgetName << " |" << setw(12) << setprecision(2) << fixed << gajet[i].price << " |" << setw(9) << quantity << " |" << endl;
 				}
 			}
@@ -668,7 +683,7 @@ void displayAdminPage(double sumAllBuyer, string adminUser, gadget gajet[], ifst
 	}
 }
 
-void receipt(double sum, ifstream& readDisplay, int customer) { //receipt
+void receipt(double sum, ifstream& readDisplay, int customer, double& diskaun, int& haveDiscount) { //receipt
 
 	string line;
 
@@ -685,6 +700,13 @@ void receipt(double sum, ifstream& readDisplay, int customer) { //receipt
 		cout << line << endl;
 	}
 	cout << setw(80) << "==========================================================" << endl;
-	cout << "\nSubtotal : RM" << setprecision(2) << fixed << sum << endl;
-	cout << "\nTotal price : RM" << setprecision(2) << fixed << sum << endl;
+	if (haveDiscount == 1) {
+		cout << "\nSubtotal : RM " << setprecision(2) << fixed << sum + diskaun << endl;
+		cout << "Discount : RM " << setprecision(2) << fixed << diskaun << endl;
+		cout << "Total price : RM " << setprecision(2) << fixed << sum << endl;
+	}
+	else if (haveDiscount == 0) {
+		cout << "\nSubtotal : RM " << setprecision(2) << fixed << sum << endl;
+		cout << "Total price : RM " << setprecision(2) << fixed << sum << endl;
+	}
 }
