@@ -268,9 +268,8 @@ string gadgetTypeSelection() { // dida
 	srand(time(0));
 	int v1 = (rand() % 5);
 	if ((v1 == 3) || (v1 == 5)) {
-		cout << "=======================================================================================================" << endl;
-		cout << "                               USE COUPON CODE : CODE06 FOR 6% DISCOUNT!                               " << endl;
-		cout << "=======================================================================================================" << endl;
+		cout << "*******************************************************************************************************" << endl;
+		cout << "                               USE COUPON CODE : CODE06 FOR 6% DISCOUNT!                               ";
 	}
 
 	do {
@@ -289,9 +288,8 @@ string buyersMenu(string selection, gadget gajet[]) {
 	srand(time(0));
 	int v1 = (rand() % 5);
 	if ((v1 == 3) || (v1 == 5)) {
-		cout << "=======================================================================================================" << endl;
-		cout << "                               USE COUPON CODE : CODE06 FOR 6% DISCOUNT!                               " << endl;
-		cout << "=======================================================================================================" << endl;
+		cout << "*******************************************************************************************************" << endl;
+		cout << "                               USE COUPON CODE : CODE06 FOR 6% DISCOUNT!                               ";
 	}
 	cout << endl << ifstream("interface/buyersMenu.txt").rdbuf() << endl << endl;
 	if (selection == "1") { //syariff
@@ -301,18 +299,18 @@ string buyersMenu(string selection, gadget gajet[]) {
 		for (int i = 0; i < 10; i++) {
 			if (gajet[i].type == "P") {
 				cout << "============================================================" << endl;
-				cout << "Name : " << gajet[i].gadgetName << endl;
-				cout <<"Capacities : " << gajet[i].desc1 << endl;
-				cout <<"Speed : " << gajet[i].desc2 << endl;
-				cout << "Dimensions : " << gajet[i].desc3 << endl;
+				cout << "Name        : " << gajet[i].gadgetName << endl;
+				cout << "Capacities  : " << gajet[i].desc1 << endl;
+				cout << "Speed       : " << gajet[i].desc2 << endl;
+				cout << "Dimensions  : " << gajet[i].desc3 << endl;
 				if (gajet[i].stock == 0) {
-					cout << "Stock : " << "UNAVAILABLE" << endl;
+					cout << "Stock       : " << "UNAVAILABLE" << endl;
 				}
 				else {
-					cout << "Stock : " << gajet[i].stock << endl;
+					cout << "Stock       : " << gajet[i].stock << endl;
 				}
-				cout << "Price : " << setprecision(2) << fixed << gajet[i].price << endl;
-				cout << "Code : " << gajet[i].gadgetCode << endl;
+				cout << "Price       : " << setprecision(2) << fixed << gajet[i].price << endl;
+				cout << "Gadget Code : " << gajet[i].gadgetCode << endl;
 				cout << "============================================================" << endl << endl;
 			}
 		}
@@ -324,18 +322,18 @@ string buyersMenu(string selection, gadget gajet[]) {
 		for (int i = 0; i < 10; i++) {
 			if (gajet[i].type == "M") {
 				cout << "============================================================" << endl;
-				cout << "Name : " << gajet[i].gadgetName << endl;
-				cout << "Sensing Type : " << gajet[i].desc1 << endl;
+				cout << "Name               : " << gajet[i].gadgetName << endl;
+				cout << "Sensing Type       : " << gajet[i].desc1 << endl;
 				cout << "Existence of wire  : " << gajet[i].desc2 << endl;
-				cout << "Dimensions : " << gajet[i].desc3 << endl;
+				cout << "Dimensions         : " << gajet[i].desc3 << endl;
 				if (gajet[i].stock == 0) {
-					cout << "Stock : " << "UNAVAILABLE" << endl;
+					cout << "Stock              : " << "UNAVAILABLE" << endl;
 				}
 				else {
-					cout << "Stock : " << gajet[i].stock << endl;
+					cout << "Stock              : " << gajet[i].stock << endl;
 				}
-				cout << "Price : " << setprecision(2) << fixed << gajet[i].price << endl;
-				cout << "Code : " << gajet[i].gadgetCode << endl;
+				cout << "Price              : " << setprecision(2) << fixed << gajet[i].price << endl;
+				cout << "Gadget Code        : " << gajet[i].gadgetCode << endl;
 				cout << "============================================================" << endl << endl;
 			}
 		}
@@ -347,17 +345,17 @@ string buyersMenu(string selection, gadget gajet[]) {
 		for (int i = 0; i < 10; i++) {
 			if (gajet[i].type == "H") {
 				cout << "============================================================" << endl;
-				cout << "Name : " << gajet[i].gadgetName << endl;
+				cout << "Name               : " << gajet[i].gadgetName << endl;
 				cout << "Existence of wires : " << gajet[i].desc1 << endl;
-				cout << "Dimension : " << gajet[i].desc2 << endl;
+				cout << "Dimension          : " << gajet[i].desc2 << endl;
 				if (gajet[i].stock == 0) {
-					cout << "Stock : " << "UNAVAILABLE" << endl;
+					cout << "Stock              : " << "UNAVAILABLE" << endl;
 				}
 				else {
-					cout << "Stock : " << gajet[i].stock << endl;
+					cout << "Stock              : " << gajet[i].stock << endl;
 				}
-				cout << "Price : " << setprecision(2) << fixed << gajet[i].price << endl;
-				cout << "Code : " << gajet[i].gadgetCode << endl;
+				cout << "Price              : " << setprecision(2) << fixed << gajet[i].price << endl;
+				cout << "Gadget Code        : " << gajet[i].gadgetCode << endl;
 				cout << "============================================================" << endl << endl;
 			}
 		}
@@ -369,19 +367,19 @@ string buyersMenu(string selection, gadget gajet[]) {
 		for (int i = 0; i < 10; i++) {
 			if (gajet[i].type == "B") {
 				cout << "============================================================" << endl;
-				cout << "Name : " << gajet[i].gadgetName << endl;
+				cout << "Name               : " << gajet[i].gadgetName << endl;
 				cout << "Battery Capacities : " << gajet[i].desc1 << endl;
-				cout << "Amount of Ports : " << gajet[i].desc2 << endl;
-				cout << "Dimensions : " << gajet[i].desc3 << endl;
-				cout << "Weight : " << gajet[i].desc4 << endl;
+				cout << "Amount of Ports    : " << gajet[i].desc2 << endl;
+				cout << "Dimensions         : " << gajet[i].desc3 << endl;
+				cout << "Weight             : " << gajet[i].desc4 << endl;
 				if (gajet[i].stock == 0) {
-					cout << "Stock : " << "UNAVAILABLE" << endl;
+					cout << "Stock              : " << "UNAVAILABLE" << endl;
 				}
 				else {
-					cout << "Stock : " << gajet[i].stock << endl;
+					cout << "Stock              : " << gajet[i].stock << endl;
 				}
-				cout << "Price : " << setprecision(2) << fixed << gajet[i].price << endl;
-				cout << "Code : " << gajet[i].gadgetCode << endl;
+				cout << "Price              : " << setprecision(2) << fixed << gajet[i].price << endl;
+				cout << "Gadget Code        : " << gajet[i].gadgetCode << endl;
 				cout << "============================================================" << endl << endl;
 			}
 		}
