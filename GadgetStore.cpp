@@ -194,7 +194,7 @@ int main() {
 			readDisplay.clear();
 		}
 		system("cls");
-	} while (homepage == '1');     //after all the buyers dah beli barang, boleh tekan Y, gi hompage and tukar kepada admin
+	} while ((homepage == '1'));     //after all the buyers dah beli barang, boleh tekan Y, gi hompage and tukar kepada admin
 
 	writeIntoTemp(tempGadget, gadgetList, gajet, inOut, readDisplay, TempAdmin, Admin, sumAllBuyer, totalSales); // TO WRITE / CLOSE/ REMOVE & RENAME TEXT FILE
 
@@ -650,16 +650,16 @@ displayAdmin:
 		if (selectAddStock == 1) {
 			//Add stocks
 		tambahStock:
-			cout << endl << setw(66) << "TYPE GADGET CODE FOR ITEM YOU WANT TO ADD STOCKS " << endl;
+			cout << endl << setw(82) << "TYPE GADGET CODE FOR ITEM YOU WANT TO ADD STOCKS (CAPITAL LETTER)" << endl;
 			cout << setw(27) << "--------->";
 			cin >> code;
 			if ((code == "P01") || (code == "P02") || (code == "M01") || (code == "M02") || (code == "M03") || (code == "H01") || (code == "H02") || (code == "H03") || (code == "B01") || (code == "B02")) {
 				for (int i = 0; i < 10; i++) {  //Kalau letak code salah, dia x keluar
 					if (code == gajet[i].gadgetCode) {
-						cout << endl << setw(63) << "Enter number of stocks to be added ---------> ";
+						cout << endl << setw(63) << "ENTER NUMBER OF STOCKS TO BE ADDED ---------> ";
 						cin >> addStocks;
 						gajet[i].stock = gajet[i].stock + addStocks;
-						cout << endl << setw(46) << "STOCKS ADDED FOR GADGET CODE (" << gajet[i].gadgetCode << ") " << gajet[i].gadgetName;
+						cout << endl << setw(47) << "STOCKS ADDED FOR GADGET CODE (" << gajet[i].gadgetCode << ") " << gajet[i].gadgetName;
 						cout << endl << setw(52) << "NEW NUMBER OF STOCKS FOR ITEM CODE " << gajet[i].gadgetCode << " IS " << gajet[i].stock << endl;
 					}
 				}
