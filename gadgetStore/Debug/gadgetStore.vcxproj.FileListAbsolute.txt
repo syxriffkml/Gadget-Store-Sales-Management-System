@@ -1,2 +1,0 @@
-C:\Users\vexr7\Desktop\Uni Stuff\UTeM\Sem 1 Year 1\BITP 1113 PROGRAMMING TECHNIQUES\Final Project - Gadget Store\Gadget-Store-Sales-Management-System\gadgetStore\Debug\gadgetStore.exe
-C:\Users\vexr7\Desktop\Uni Stuff\UTeM\Sem 1 Year 1\BITP 1113 PROGRAMMING TECHNIQUES\Final Project - Gadget Store\Gadget-Store-Sales-Management-System\gadgetStore\Debug\gadgetStore.pdb
