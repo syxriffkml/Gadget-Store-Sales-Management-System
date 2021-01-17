@@ -188,13 +188,13 @@ int main() {
 		sum = 0.00;
 		cout << endl << ifstream("interface/backToHomepage.txt").rdbuf();
 		cin >> homepage;
-		if (homepage == 'Y' || homepage == 'y') {
+		if (homepage == '1') {
 			// .clear() untuk buang customer lama punya receipt display
 			inOut.clear();
 			readDisplay.clear();
 		}
 		system("cls");
-	} while ((homepage == 'Y') || (homepage == 'y'));     //after all the buyers dah beli barang, boleh tekan Y, gi hompage and tukar kepada admin
+	} while (homepage == '1');     //after all the buyers dah beli barang, boleh tekan Y, gi hompage and tukar kepada admin
 
 	writeIntoTemp(tempGadget, gadgetList, gajet, inOut, readDisplay, TempAdmin, Admin, sumAllBuyer, totalSales); // TO WRITE / CLOSE/ REMOVE & RENAME TEXT FILE
 
