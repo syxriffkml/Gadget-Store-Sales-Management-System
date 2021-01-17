@@ -1,0 +1,9 @@
+                            ******************************************
+                            *    1. Display all stocks data          *   
+                            *    2. Display pendrive stocks data     *
+			    *    3. Display mouse stocks data        *
+                            *    4. Display headphone stocks data    *
+                            *    5. Display powerbank stocks data    *
+			    ******************************************
+
+			    Enter selection --------->   
